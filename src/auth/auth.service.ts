@@ -46,6 +46,7 @@ export class AuthService {
       const resp = await numio.verifyToken(temp);
       console.log('resp [[[]]] ', resp.data.data.userInformation);
       if (!resp || resp.data.status !== 200) {
+        console.log('In if 1');
         throw { statusCode: 500, message: 'Internal server error' };
       }
       const {
@@ -57,6 +58,7 @@ export class AuthService {
 
       const userExist = await this.userModel.findOne({ email: email });
       if (!userExist) {
+        console.log('In if 2');
         const userData = {
           numioAddress: numioId,
           firstName: first_name,
@@ -66,10 +68,12 @@ export class AuthService {
         };
         const newUser = this.userModel(userData);
         const createdUser = await this.userModel.create(newUser);
+        console.log(3);
         const token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
           expiresIn: '1y',
         });
         if (!token) {
+          console.log('In if 4');
           throw { statusCode: 400, message: 'token not generated!' };
         }
         const user = {
@@ -92,6 +96,7 @@ export class AuthService {
         expiresIn: '1y',
       });
       if (!token) {
+        console.log('In if 5');
         throw { statusCode: 400, message: 'token not generated!' };
       }
       const user = {
@@ -108,8 +113,10 @@ export class AuthService {
         token,
         loginWith: 'numio',
       };
+      console.log('User 6 =====>>>', user);
       return user;
     } catch (error) {
+      console.log('In catch', error);
       throw error;
     }
   }

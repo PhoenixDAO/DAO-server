@@ -1,4 +1,4 @@
- /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Controller, Post, Res, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
@@ -25,6 +25,7 @@ export class AuthController {
   async loginWithNumio(@Req() req: Request, @Res() res: Response) {
     try {
       const user = await this.authService.loginWithNumio(req);
+      console.log('User created here -------->>>>>', user);
       res.status(200).send({
         responseCode: 200,
         result: user,
