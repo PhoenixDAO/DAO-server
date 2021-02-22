@@ -662,6 +662,8 @@ export class ProposalService {
 
   updateProposal = async req => {
     console.log('Working', req.params.id);
+    let serverDate = moment(Date.now()).format();
+    console.log('Server date ======////', serverDate);
     try {
       const proposal = await this.proposalModel.findById(req.params.id);
       if (!proposal) {
