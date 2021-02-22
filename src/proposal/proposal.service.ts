@@ -791,20 +791,4 @@ export class ProposalService {
   testing() {
     // console.log('Cron job');
   }
-
-  dummyFunction = () => {
-    console.log('Dummy ');
-  };
-
-  dummyFunction2 = () => {
-    console.log('Dummy ');
-  };
-
-  dummyFunction3 = () => {
-    console.log('Dummy ');
-  };
-
-  dummyFunction4 = () => {
-    console.log('Dummy ');
-  };
 }
