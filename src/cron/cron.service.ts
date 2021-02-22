@@ -35,7 +35,7 @@ export class CronService {
     this.votingTimeStart({ body: { status: 'Voting' } });
   }
 
-  @Cron('*/10 * * * * *')
+  @Cron('*/6 * * * * *')
   testing() {
     console.log('Cron job');
     this.getEvents();
