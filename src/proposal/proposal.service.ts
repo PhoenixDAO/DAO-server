@@ -795,4 +795,16 @@ export class ProposalService {
   dummyFunction = () => {
     console.log('Dummy ');
   };
+
+  dummyFunction2 = () => {
+    console.log('Dummy ');
+  };
+
+  dummyFunction3 = () => {
+    console.log('Dummy ');
+  };
+
+  dummyFunction4 = () => {
+    console.log('Dummy ');
+  };
 }
