@@ -735,7 +735,7 @@ export class ProposalService {
             $set: {
               counter: proposal.counter + 1,
               minimumUpvotes: Attributes.minimumUpvotes,
-              maxUpvoteDays: Attributes.maxUpvoteDays,
+              // maxUpvoteDays: Attributes.maxUpvoteDays,
             },
           },
           { runValidators: true, new: true },
