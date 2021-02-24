@@ -663,6 +663,8 @@ export class ProposalService {
   updateProposal = async req => {
     console.log('Working', req.params.id);
     let serverDate = moment(Date.now()).format();
+    const Attributes = await this.DAOAttributesModel.find().exec();
+    console.log('DAO ATTRIBUTES ===>>>', Attributes);
     console.log('Server date ======////', serverDate);
     try {
       const proposal = await this.proposalModel.findById(req.params.id);
@@ -730,7 +732,11 @@ export class ProposalService {
         await this.proposalModel.findByIdAndUpdate(
           proposal._id,
           {
-            $set: { counter: proposal.counter + 1 },
+            $set: {
+              counter: proposal.counter + 1,
+              minimumUpvotes: Attributes.minimumUpvotes,
+              maxUpvoteDays: Attributes.maxUpvoteDays,
+            },
           },
           { runValidators: true, new: true },
         );
