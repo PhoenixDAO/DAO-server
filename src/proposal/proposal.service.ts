@@ -665,6 +665,10 @@ export class ProposalService {
     let serverDate = moment(Date.now()).format();
     const Attributes = await this.DAOAttributesModel.find().exec();
     console.log('DAO ATTRIBUTES ===>>>', Attributes);
+    console.log(
+      'Attributes MINIMUMUPVOTES // ////',
+      Attributes[0].minimumUpvotes,
+    );
     console.log('Server date ======////', serverDate);
     try {
       const proposal = await this.proposalModel.findById(req.params.id);
@@ -734,7 +738,7 @@ export class ProposalService {
           {
             $set: {
               counter: proposal.counter + 1,
-              minimumUpvotes: Attributes.minimumUpvotes,
+              minimumUpvotes: Attributes[0].minimumUpvotes,
               // maxUpvoteDays: Attributes.maxUpvoteDays,
             },
           },
