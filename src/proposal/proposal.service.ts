@@ -227,16 +227,18 @@ export class ProposalService {
     }
   };
   getProposalByNumioAddressAndProposalStatus = async (numioAddress, status) => {
+    console.log('Working', numioAddress, status);
     try {
       const result = await this.proposalModel.find({
         numioAddress: numioAddress,
         status: status,
       });
       if (result.length == 0) {
-        throw { statusCode: 404, message: 'Not Proposal Found' };
+        throw { statusCode: 404, message: 'No Proposal Found' };
       }
       return result;
     } catch (err) {
+      console.log('In catch', err);
       throw { status: 400, message: err.message };
     }
   };
@@ -720,6 +722,7 @@ export class ProposalService {
           budget: req.body.budget,
           purpose: req.body.purpose,
           importance: req.body.importance,
+          userProfession:req.body.userProfession,
           // fundsUsage: req.body.fundsUsage,
           // personalExperience: req.body.personalExperience,
           experiencedYear: req.body.experiencedYear,

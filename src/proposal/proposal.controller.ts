@@ -170,6 +170,7 @@ export class ProposalController {
         res.status(400).send({ responseCode: 400, result: 'Not Found' });
       }
     } catch (err) {
+      console.log('In catch ====>', err);
       res.status(400).send({
         responseCode: 400,
         result: err,
