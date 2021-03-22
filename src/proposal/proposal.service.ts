@@ -663,6 +663,7 @@ export class ProposalService {
   };
 
   updateProposal = async req => {
+    console.log('Working in UpdateProposal')
     console.log('Working', req.params.id);
     let serverDate = moment(Date.now()).format();
     const Attributes = await this.DAOAttributesModel.find().exec();
