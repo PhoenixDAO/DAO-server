@@ -723,7 +723,7 @@ export class ProposalService {
           budget: req.body.budget,
           purpose: req.body.purpose,
           importance: req.body.importance,
-          userProfession:req.body.userProfession,
+          // userProfession:req.body.userProfession,
           // fundsUsage: req.body.fundsUsage,
           // personalExperience: req.body.personalExperience,
           experiencedYear: req.body.experiencedYear,
@@ -732,6 +732,7 @@ export class ProposalService {
           // reward: req.body.reward,
           numioAddress: req.body.numioAddress,
           milestone: req.body.milestone,
+          userProfession: req.body.userProfession
           // counter: proposal.counter + 1,
         },
         { runValidators: true, new: true },
