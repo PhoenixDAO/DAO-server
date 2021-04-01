@@ -193,6 +193,7 @@ export class TransactionService {
     }
   }
   private async findTransaction(id: string) {
+    console.log('In find transaction')
     let transaction;
     try {
       transaction = await this.transactionModel

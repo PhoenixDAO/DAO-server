@@ -20,30 +20,11 @@ export class NodemailerService {
   sendEmail = async (req, type) => {
     // console.log('Working here')
     console.log('Password ====>', process.env.EmailPassword);
-    // //console.log('Request', req)
-    console.log('Name -->', req.body.email);
+    console.log('Request', req.body)
+    console.log('Email -->', req.body.email);
+    // req.body.email = 'samad13354@gmail.com'
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     try {
-      // var transporter = nodemailer.createTransport({
-      //   // host: "Gmail",
-      //   // port: 587,
-      //   // secure: false,
-      //   // requireTLS: true,
-      //   // auth: {
-      //   //   user: 'samadhello9812@gmail.com' ,
-      //   //   pass: 'deutschland9812',
-      //   // },
-      //   service: 'Gmail',
-      //   port: 587,
-      //   secure: false,
-      //   auth: {
-      //     user: 'samadhello9812@gmail.com',
-      //     pass: process.env.EmailPassword,
-      //   },
-      //   tls: {
-      //     rejectUnauthorized: false,
-      //   },
-      // });
 
       var mailOptions = {
         from: '',

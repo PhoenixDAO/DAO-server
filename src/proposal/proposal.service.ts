@@ -133,18 +133,10 @@ export class ProposalService {
       //   );
       // }
 
-      if (req.body.status == 'Rejected') {
-        const emailResult = await this.NodemailerService.sendEmail(
-          req,
-          'proposalRejection',
-        );
-
-        console.log('Email', emailResult);
-        console.log(3);
-      }
+  
       let Attributes = [];
       const proposal = await this.proposalModel.findById(id);
-      console.log('proposal', proposal);
+      // console.log('proposal', proposal);
       // throw 'abc'
       //  if(proposal.status == 'UpVote' || proposal.status =='Rejected' && req.body.stage == 1 ) {
       //   console.log('In if stage wrong', req.body.stage)
@@ -154,7 +146,18 @@ export class ProposalService {
         console.log(5);
         throw { statusCode: 404, message: 'Proposal Not Found' };
       }
-      console.log('AAAAA');
+      console.log('Status =====+++++', req.body.status)
+      if (req.body.status == 'Rejected') {
+        console.log('In if Send email')
+        const emailResult = await this.NodemailerService.sendEmail(
+          req,
+          'proposalRejection',
+        );
+
+        console.log('Email', emailResult);
+        console.log(3);
+      }
+      // console.log('AAAAA');
       if (req.body.status === 'UpVote') {
         console.log(989);
         Attributes = await this.DAOAttributesModel.find().exec();
@@ -723,7 +726,7 @@ export class ProposalService {
           budget: req.body.budget,
           purpose: req.body.purpose,
           importance: req.body.importance,
-          // userProfession:req.body.userProfession,
+          userProfession:req.body.userProfession,
           // fundsUsage: req.body.fundsUsage,
           // personalExperience: req.body.personalExperience,
           experiencedYear: req.body.experiencedYear,
@@ -732,7 +735,6 @@ export class ProposalService {
           // reward: req.body.reward,
           numioAddress: req.body.numioAddress,
           milestone: req.body.milestone,
-          userProfession: req.body.userProfession
           // counter: proposal.counter + 1,
         },
         { runValidators: true, new: true },
