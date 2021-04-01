@@ -20,14 +20,13 @@ export class NodemailerService {
   sendEmail = async (req, type) => {
     // console.log('Working here')
     console.log('Password ====>', process.env.EmailPassword);
-    console.log('Request', req.body)
-    console.log('Email -->', req.body.email);
-    // req.body.email = 'samad13354@gmail.com'
+    console.log('Request', req.body);
+    console.log('Email -->', req.body.email)
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     try {
 
       var mailOptions = {
-        from: '',
+        from: process.env.EmailUserName,
         to: req.body.email,
         //to: 'samad@yopmail.com',
         subject: 'PHNX-Dao reason for rejection.',
@@ -60,13 +59,13 @@ export class NodemailerService {
           <p>The PhoenixDao Team</P>
         </div>
         `,
-        attachments: [
-          {
-            filename: 'logo.png',
-            path: './assets/logo.png',
-            cid: 'logo', //my mistake was putting "cid:logo@cid" here!
-          },
-        ],
+        // attachments: [
+        //   {
+        //     filename: 'logo.png',
+        //     path: './assets/logo.png',
+        //     cid: 'logo', //my mistake was putting "cid:logo@cid" here!
+        //   },
+        // ],
       };
 
       let info = await transporter.sendMail(mailOptions, function(error, info) {
