@@ -22,14 +22,13 @@ export class CronService {
   ) {}
 
   @Cron('1 0 0 5 * *')
-  // @Cron('1 30 * * * *')
-  votingTimeEnd() {
-    console.log('cron job is running,calculating voting results');
-    this.votingResultCalculation({ body: { votingStatus: true } });
-  }
-
-  // @Cron('1 0 5 2 * *')
-  @Cron('1 0 * * * *')
+  // // @Cron('1 30 * * * *')
+  // votingTimeEnd() {
+  //   console.log('cron job is running,calculating voting results');
+  //   this.votingResultCalculation({ body: { votingStatus: true } });
+  // }
+  @Cron('1 0 5 2 * *')
+  // @Cron('1 0 * * * *')
   votingDateArrival() {
     console.log('cron job is running, voting starts now');
     this.votingTimeStart({ body: { status: 'Voting' } });
@@ -60,7 +59,8 @@ export class CronService {
 
   updateStatus = async (id, status) => {
     const web3 = new Web3(
-      'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
+      // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
+      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
     );
 
     const contract = new web3.eth.Contract(
@@ -104,7 +104,7 @@ export class CronService {
           console.log('transaction has -->', hash);
         });
     } catch (Err) {
-      console.log(Err);
+      console.log('Error in update status', Err);
       return false;
     }
   };
@@ -366,14 +366,17 @@ export class CronService {
   // }
 
   getEvents = async () => {
+    console.log(1);
     let web3 = new Web3(
-      'https://rinkeby.infura.io/v3/c89f216154d84b83bb9344a7d0a91108',
+      // 'https://rinkeby.infura.io/v3/c89f216154d84b83bb9344a7d0a91108',
+      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
     );
     let contract_abi = PHNX_PROPOSAL_ABI;
     let contract = new web3.eth.Contract(
       contract_abi,
       '0x5579fBfD5417758Bf276276aFb597b7C6b30786E',
     );
+    console.log(2);
     const result = await this.blockModel.find();
     contract.getPastEvents(
       'ProposalSubmitted',
@@ -382,6 +385,7 @@ export class CronService {
         toBlock: 'latest',
       },
       async (err, events) => {
+        console.log(3);
         if (!err) {
           console.log('events', events.length);
           if (events.length > 0) {
@@ -400,7 +404,7 @@ export class CronService {
               );
             }
             let newBlock = events[events.length - 1].blockNumber + 1;
-
+            console.log(4);
             const result2 = await this.blockModel.findByIdAndUpdate(
               result[0]._id,
               {
@@ -408,9 +412,11 @@ export class CronService {
               },
             );
           } else {
+            console.log(5);
             console.log('No events found');
           }
         } else {
+          console.log(6);
           console.log('In else err', err);
         }
       },

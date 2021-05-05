@@ -49,25 +49,45 @@ export class AuthService {
         console.log('In if 1');
         throw { statusCode: 500, message: 'Internal server error' };
       }
-      const {
-        email,
-        numioId,
-        first_name,
-        last_name,
-      } = resp.data.data.userInformation;
+      // const {
+      //   email,
+      //   numioId,
+      //   first_name,
+      //   last_name,
+      // } = resp.data.data.userInformation;
 
+      //  MY CHANGE
+      const { email, numioId, first_name, last_name } = req.body.information;
+      console.log('Email =======>>>>>>', email);
       const userExist = await this.userModel.findOne({ email: email });
+      console.log('User exist', userExist);
+      // if (req.body.numioAddress != userExist.numioAddress) {
+      //   throw { statusCode: 422, message: 'MetaMask address changed' };
+      // }
       if (!userExist) {
         console.log('In if 2');
+        // const userData = {
+        //   numioAddress: numioId,
+        //   firstName: first_name,
+        //   lastName: last_name,
+        //   email: email,
+        //   isAdmin: false,
+        // };
+
+        // MY CHANGE
         const userData = {
-          numioAddress: numioId,
-          firstName: first_name,
-          lastName: last_name,
-          email: email,
+          numioAddress: req.body.information.numioAddress,
+          firstName: req.body.information.firstName,
+          lastName: req.body.information.lastName,
+          email: req.body.information.email,
           isAdmin: false,
+          numioId: req.body.information.numioId,
         };
+        console.log('Before newUser', userData);
         const newUser = this.userModel(userData);
+        console.log('NewUser', newUser);
         const createdUser = await this.userModel.create(newUser);
+        console.log('Created user', createdUser);
         console.log(3);
         const token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
           expiresIn: '1y',
@@ -89,6 +109,7 @@ export class AuthService {
           createdAt: createdUser.createdAt,
           token,
           loginWith: 'numio',
+          numioId: createdUser.numioId,
         };
         return user;
       }
@@ -112,11 +133,12 @@ export class AuthService {
         createdAt: userExist.createdAt,
         token,
         loginWith: 'numio',
+        metaMaskAddress: userExist.metaMaskAddress,
       };
       console.log('User 6 =====>>>', user);
       return user;
     } catch (error) {
-      console.log('In catch', error);
+      console.log('In catch Login with Numio', error);
       throw error;
     }
   }

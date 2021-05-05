@@ -133,7 +133,6 @@ export class ProposalService {
       //   );
       // }
 
-  
       let Attributes = [];
       const proposal = await this.proposalModel.findById(id);
       // console.log('proposal', proposal);
@@ -146,9 +145,9 @@ export class ProposalService {
         console.log(5);
         throw { statusCode: 404, message: 'Proposal Not Found' };
       }
-      console.log('Status =====+++++', req.body.status)
+      console.log('Status =====+++++', req.body.status);
       if (req.body.status == 'Rejected') {
-        console.log('In if Send email')
+        console.log('In if Send email');
         const emailResult = await this.NodemailerService.sendEmail(
           req,
           'proposalRejection',
@@ -271,7 +270,8 @@ export class ProposalService {
     //console.log('++++++++++++++++++++',PHNX_PROPOSAL_ABI)
     console.log('Update status from blockchain');
     const web3 = new Web3(
-      'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
+      // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
+      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
     );
 
     const contract = new web3.eth.Contract(
@@ -666,7 +666,7 @@ export class ProposalService {
   };
 
   updateProposal = async req => {
-    console.log('Working in UpdateProposal')
+    console.log('Working in UpdateProposal');
     console.log('Working', req.params.id);
     let serverDate = moment(Date.now()).format();
     const Attributes = await this.DAOAttributesModel.find().exec();
@@ -726,7 +726,7 @@ export class ProposalService {
           budget: req.body.budget,
           purpose: req.body.purpose,
           importance: req.body.importance,
-          userProfession:req.body.userProfession,
+          userProfession: req.body.userProfession,
           // fundsUsage: req.body.fundsUsage,
           // personalExperience: req.body.personalExperience,
           experiencedYear: req.body.experiencedYear,
