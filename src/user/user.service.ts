@@ -65,6 +65,21 @@ export class UserService {
       throw error;
     }
   }
+  findUserByNumioId = async req => {
+    console.log('REQ', req.params.id);
+    try {
+      const userExist = await this.userModel.find({
+        numioId: req.params.id,
+      });
+      if (!userExist) {
+        throw { statusCode: 400, message: 'No user found' };
+      }
+      console.log('User exist', userExist);
+      return userExist;
+    } catch (err) {
+      throw err;
+    }
+  };
   getVotedProposals = async req => {
     try {
       const userExist = await this.userModel.findOne({

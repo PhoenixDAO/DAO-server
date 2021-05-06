@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Patch } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from 'express';
 
@@ -95,6 +95,22 @@ export class UserController {
     try {
       const user = await this.userService.getStakedProposals(req);
 
+      res.status(200).send({
+        responseCode: 200,
+        result: user,
+      });
+    } catch (err) {
+      res.status(err.statusCode).send({
+        responseCode: err.statusCode,
+        result: err.message,
+      });
+    }
+  }
+
+  @Get('/findUserByNumioId/:id')
+  async findUserByNumioId(@Req() req: Request, @Res() res: Response) {
+    try {
+      const user = await this.userService.findUserByNumioId(req);
       res.status(200).send({
         responseCode: 200,
         result: user,

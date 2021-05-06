@@ -30,14 +30,14 @@ export class CronService {
   @Cron('1 0 5 2 * *')
   // @Cron('1 0 * * * *')
   votingDateArrival() {
-    console.log('cron job is running, voting starts now');
-    this.votingTimeStart({ body: { status: 'Voting' } });
+    // console.log('cron job is running, voting starts now');
+    // this.votingTimeStart({ body: { status: 'Voting' } });
   }
 
   @Cron('*/6 * * * * *')
   testing() {
-    console.log('Cron job');
-    this.getEvents();
+    // console.log('Cron job');
+    // this.getEvents();
   }
 
   getCurrentGasPrices = async () => {
