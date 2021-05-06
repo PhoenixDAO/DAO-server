@@ -59,6 +59,7 @@ export class UserController {
   @Get('/:id')
   async getUserById(@Req() req: Request, @Res() res: Response) {
     try {
+      console.log('ID HERE /////////', req.params.id);
       const user = await this.userService.getUserById(req.params.id);
       res.status(200).send({
         responseCode: 200,
