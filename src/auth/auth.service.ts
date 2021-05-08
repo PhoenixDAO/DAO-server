@@ -133,7 +133,7 @@ export class AuthService {
         createdAt: userExist.createdAt,
         token,
         loginWith: 'numio',
-        metaMaskAddress: userExist.metaMaskAddress,
+        numioId: userExist.numioId,
       };
       console.log('User 6 =====>>>', user);
       return user;

@@ -331,7 +331,7 @@ export class ProposalService {
     let blockChainResult;
     try {
       const proposal = await this.proposalModel.findById(req.params.id);
-      //   console.log('Proposal', proposal.status)
+      console.log('Proposal', proposal);
 
       if (!proposal) {
         //   console.log('In if 1')
@@ -361,7 +361,7 @@ export class ProposalService {
       //  console.log('Hello')
 
       const checkUserExist = await this.userModel.find({
-        email: req.body.email,
+        numioId: req.body.numioId,
       });
       if (checkUserExist.length == 0) {
         console.log('In  if');
@@ -370,20 +370,22 @@ export class ProposalService {
       }
       const check = proposal.votes.some(el => {
         //Here is the name validation (A user cannot vote twice)
-        if (el.email == req.body.email) {
+        if (el.numioId == req.body.numioId) {
           //  console.log('In if 5')
           throw { statusCode: 400, message: 'User cannot vote again' };
         }
       });
 
-      const checkCount = await this.proposalModel.findById(req.params.id);
+      // const checkCount = await this.proposalModel.findById(req.params.id);
 
-      const singleProposal = await this.proposalModel.findById(req.params.id);
+      // const singleProposal = await this.proposalModel.findById(req.params.id);
 
-      console.log('check count', checkCount.votes.length);
-      console.log('single proposal', singleProposal.minimumUpvotes);
+      // console.log('check count', checkCount);
+      // console.log('single proposal', singleProposal);
 
-      if (checkCount.votes.length >= singleProposal.minimumUpvotes - 1) {
+      // if (checkCount.votes.length >= singleProposal.minimumUpvotes - 1) {
+      //  Change this, commented the above four written code lines and added this one below
+      if (proposal.votes.length >= proposal.minimumUpvotes - 1) {
         //  console.log('In if checkCount', req.body)
         let tempStatus = { body: { status: 'Voting' } };
         console.log('ID here ----->', req.params.id);
@@ -408,16 +410,16 @@ export class ProposalService {
         req.params.id,
         {
           $push: {
-            votes: { date: Date.now(), email: req.body.email },
+            votes: { date: Date.now(), numioId: req.body.numioId },
           },
         },
         { runValidators: true, new: true },
       );
 
-      console.log('Result email', result);
+      console.log('Result numioId', result);
 
       const result2 = await this.userModel.findOneAndUpdate(
-        { email: req.body.email },
+        { numioId: req.body.numioId },
         { $push: { proposalVote: result._id } },
       );
 
