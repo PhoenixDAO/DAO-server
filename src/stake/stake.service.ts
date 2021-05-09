@@ -18,6 +18,8 @@ export class StakeService {
     private readonly transactionService: TransactionService,
   ) {}
   async addStake(req) {
+    console.log('REQ Obj', req.body);
+    console.log('REQ Params ID', req.params.id);
     try {
       const user = req.body.user;
       const proposalId = req.params.id;
@@ -32,8 +34,9 @@ export class StakeService {
         throw { statusCode: 400, message: 'User does not exist' };
       }
       const userExist = await this.userModel.findOne({
-        email: user.email,
+        numioId: user.numioId,
       });
+      console.log('User exist //////', userExist);
       if (!userExist) {
         throw { statusCode: 400, message: 'User does not exist' };
       }
@@ -66,7 +69,7 @@ export class StakeService {
       // USER SHOULD NOT STAKE TWICE
 
       proposal.stake.some(el => {
-        if (el.email == userExist.email) {
+        if (el.numioId == userExist.numioId) {
           throw {
             statusCode: 403,
             message: 'You cannot stake multiple times on a single proposal!',
@@ -116,19 +119,19 @@ export class StakeService {
           req.params.id,
           {
             $push: {
-              stake: { date: Date.now(), email: userExist.email },
+              stake: { date: Date.now(), numioId: userExist.numioId },
             },
             reward: newReward,
           },
           { new: true },
         )
         .exec();
-
+      console.log('Updated proposal', updatedProposal);
       // UPDATING THE USER DOCUMENT IN DATABASE
 
       const updatedUser = await this.userModel
         .findOneAndUpdate(
-          { email: userExist.email },
+          { numioId: userExist.numioId },
           { $push: { proposalStake: updatedProposal._id } },
           { new: true },
         )
@@ -136,6 +139,7 @@ export class StakeService {
 
       return { updatedUser: updatedUser, updatedProposal: updatedProposal };
     } catch (error) {
+      console.log('Error ===>>>>', error);
       throw error;
     }
   }
