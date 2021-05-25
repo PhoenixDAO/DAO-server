@@ -2,7 +2,8 @@
 //   'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7';
 
 export const PHNX_PROPOSAL_ADDRESS =
-  '0x5579fBfD5417758Bf276276aFb597b7C6b30786E';
+  // '0x5579fBfD5417758Bf276276aFb597b7C6b30786E';
+  '0x7415eA5df0870fBcab3027c334e268F50B40ADf5';
 export const PHNX_PROPOSAL_ABI = [
   {
     anonymous: false,

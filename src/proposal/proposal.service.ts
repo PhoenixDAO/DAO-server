@@ -276,7 +276,7 @@ export class ProposalService {
 
     const contract = new web3.eth.Contract(
       PHNX_PROPOSAL_ABI,
-      '0x5579fBfD5417758Bf276276aFb597b7C6b30786E',
+      PHNX_PROPOSAL_ADDRESS,
     );
     try {
       let count = await web3.eth.getTransactionCount(
@@ -288,7 +288,7 @@ export class ProposalService {
       console.log('Working');
       let rawTransaction = {
         from: '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
-        to: '0x5579fBfD5417758Bf276276aFb597b7C6b30786E',
+        to: PHNX_PROPOSAL_ADDRESS,
         data: contract.methods.updateProposalStatus(id, 2).encodeABI(),
         gasPrice: gasPrices.high * 1000000000,
         nonce: count,

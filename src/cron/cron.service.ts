@@ -374,7 +374,7 @@ export class CronService {
     let contract_abi = PHNX_PROPOSAL_ABI;
     let contract = new web3.eth.Contract(
       contract_abi,
-      '0x5579fBfD5417758Bf276276aFb597b7C6b30786E',
+      '0x7415eA5df0870fBcab3027c334e268F50B40ADf5',
     );
     console.log(2);
     const result = await this.blockModel.find();
