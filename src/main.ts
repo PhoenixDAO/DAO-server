@@ -13,6 +13,7 @@ async function bootstrap() {
   //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   //   credentials: true,
   // });
+  console.log('Working')
   const app = await NestFactory.create(AppModule, { cors: true });
   let bodyParser = require('body-parser');
   // apps.use(express.static('public'));
