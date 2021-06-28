@@ -7,6 +7,8 @@ import { ProposalService } from '../proposal/proposal.service';
 import { TransactionService } from '../transaction/transaction.service';
 import { User } from 'src/user/user.model';
 import { Proposal } from 'src/proposal/proposal.model';
+import { PHNX_STAKING_ADDRESS } from 'src/contracts/contracts';
+const Web3 = require('web3');
 
 @Injectable()
 export class StakeService {
@@ -18,6 +20,11 @@ export class StakeService {
     private readonly transactionService: TransactionService,
   ) {}
   async addStake(req) {
+    console.log('In add stake', req.body)
+    // const web3 = new Web3(
+    //   // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
+    //   'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+    // );
     console.log('REQ Obj', req.body);
     console.log('REQ Params ID', req.params.id);
     try {
@@ -28,6 +35,8 @@ export class StakeService {
       const reward = req.body.reward;
       const TxHash = req.body.TxHash;
 
+      console.log(1)
+
       // USER MUST EXIST
 
       if (!user) {
@@ -36,11 +45,15 @@ export class StakeService {
       const userExist = await this.userModel.findOne({
         numioId: user.numioId,
       });
+      
+      console.log(2)
       console.log('User exist //////', userExist);
       if (!userExist) {
         throw { statusCode: 400, message: 'User does not exist' };
       }
 
+      
+      console.log(3)
       // PROPOSAL ID MUST BE VALID
 
       if (!proposalId) {
@@ -57,6 +70,9 @@ export class StakeService {
         };
       }
 
+      
+      console.log(4)
+
       // PROPOSAL STATUS MUST BE VOTING
 
       if (proposal.status !== 'Voting') {
@@ -68,6 +84,8 @@ export class StakeService {
 
       // USER SHOULD NOT STAKE TWICE
 
+      
+      console.log(6)
       proposal.stake.some(el => {
         if (el.numioId == userExist.numioId) {
           throw {
@@ -86,6 +104,16 @@ export class StakeService {
         };
       }
 
+      
+      console.log(7)
+      const txReceipt = await this.getTxReceipt(TxHash)
+
+      console.log('Tx Receipt', txReceipt.to.toLowerCase(), txReceipt.from.toLowerCase())
+      console.log('Data', PHNX_STAKING_ADDRESS.toLowerCase(), user.numioAddress.toLowerCase())
+      if(txReceipt.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txReceipt.from.toLowerCase() != user.numioAddress.toLowerCase()){
+        throw 'Invalid transaction'
+      }
+      
       // CREATING STAKE DOCUMENT AND SAVING IN DATABASE
 
       const newStake = new this.stakeModel({
@@ -178,5 +206,18 @@ export class StakeService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async getTxReceipt(txHash: any){
+    console.log('Service working')
+    const web3 = new Web3(
+      // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
+      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+    );
+    console.log(2)
+    const txReceipt = await web3.eth.getTransactionReceipt(txHash)
+
+      console.log('Tx Receipt', txReceipt)
+      return txReceipt
   }
 }

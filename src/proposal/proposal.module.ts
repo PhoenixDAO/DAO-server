@@ -34,5 +34,6 @@ import { BlockSchema } from '../proposal/proposal.model';
     UserService,
     NodemailerService,
   ],
+  exports: [ProposalService],
 })
 export class ProposalModule {}

@@ -12,7 +12,7 @@ const moment = require('moment');
 const Web3 = require('web3');
 import { ProposalService } from '../proposal/proposal.service';
 // import { getEvents } from '../block/block.service';
-import { PHNX_PROPOSAL_ABI } from '../contracts/contracts';
+import { PHNX_PROPOSAL_ABI, PHNX_PROPOSAL_ADDRESS } from '../contracts/contracts';
 
 @Injectable()
 export class CronService {
@@ -24,19 +24,19 @@ export class CronService {
   @Cron('1 0 0 5 * *')
   // // @Cron('1 30 * * * *')
   votingTimeEnd() {
-    console.log('cron job is running,calculating voting results');
+    // console.log('cron job is running,calculating voting results');
     this.votingResultCalculation({ body: { votingStatus: true } });
   }
   @Cron('1 0 5 2 * *')
   // @Cron('1 0 * * * *')
   votingDateArrival() {
-    console.log('cron job is running, voting starts now');
+    // console.log('cron job is running, voting starts now');
     this.votingTimeStart({ body: { status: 'Voting' } });
   }
 
   @Cron('*/6 * * * * *')
   testing() {
-    console.log('Cron job');
+    // console.log('Cron job');
     this.getEvents();
   }
 
@@ -281,7 +281,7 @@ export class CronService {
 
   votingTimeStart = async req => {
     try {
-      console.log('req.body is ', req.body);
+      // console.log('req.body is ', req.body);
       const votingProposals = await this.proposalModel.find({
         status: req.body.status,
       });
@@ -294,7 +294,7 @@ export class CronService {
       }
 
       let serverDate = moment(Date.now()).format();
-      console.log('server Date is ', serverDate);
+      // console.log('server Date is ', serverDate);
 
       for (let i = 0; i < votingProposals.length; i++) {
         console.log(
@@ -366,7 +366,7 @@ export class CronService {
   // }
 
   getEvents = async () => {
-    console.log(1);
+    // console.log(1);
     let web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/c89f216154d84b83bb9344a7d0a91108',
       'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
@@ -374,10 +374,11 @@ export class CronService {
     let contract_abi = PHNX_PROPOSAL_ABI;
     let contract = new web3.eth.Contract(
       contract_abi,
-      '0x7415eA5df0870fBcab3027c334e268F50B40ADf5',
+      PHNX_PROPOSAL_ADDRESS,
     );
-    console.log(2);
+    // console.log(2);
     const result = await this.blockModel.find();
+    console.log('Result [][]', result)
     contract.getPastEvents(
       'ProposalSubmitted',
       {
@@ -385,9 +386,8 @@ export class CronService {
         toBlock: 'latest',
       },
       async (err, events) => {
-        console.log(3);
         if (!err) {
-          console.log('events', events.length);
+          // console.log('events', events.length);
           if (events.length > 0) {
             for (let i = 0; i < events.length; i++) {
               let proposalId = events[i].returnValues[0];
@@ -404,7 +404,7 @@ export class CronService {
               );
             }
             let newBlock = events[events.length - 1].blockNumber + 1;
-            console.log(4);
+       
             const result2 = await this.blockModel.findByIdAndUpdate(
               result[0]._id,
               {
@@ -412,11 +412,11 @@ export class CronService {
               },
             );
           } else {
-            console.log(5);
-            console.log('No events found');
+            // console.log(5);
+            // console.log('No events found');
           }
         } else {
-          console.log(6);
+          // console.log(6);
           console.log('In else err', err);
         }
       },

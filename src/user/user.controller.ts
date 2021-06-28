@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Get, Post, Req, Res, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Patch, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Request, Response } from 'express';
 
@@ -56,7 +56,7 @@ export class UserController {
     }
   }
   // Here we get user by providing numio address
-  @Get('/:id')
+  @Put('/:id')
   async getUserById(@Req() req: Request, @Res() res: Response) {
     try {
       console.log('ID HERE /////////', req.params.id);
@@ -107,9 +107,11 @@ export class UserController {
     }
   }
 
-  @Get('/findUserByNumioId/:id')
+  @Put('/findUserByNumioId/:id')
   async findUserByNumioId(@Req() req: Request, @Res() res: Response) {
+    console.log('In request')
     try {
+      console.log('Req in controller', req.body)
       const user = await this.userService.findUserByNumioId(req);
       res.status(200).send({
         responseCode: 200,

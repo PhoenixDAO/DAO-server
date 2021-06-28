@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from 'express';
 import { ProposalService } from './proposal.service';
-import { Controller, Get, Post, Req, Res, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Delete, Put, Patch } from '@nestjs/common';
 @Controller('proposal')
 export class ProposalController {
   constructor(private readonly ProposalService: ProposalService) {}
@@ -262,6 +262,22 @@ export class ProposalController {
         responseCode: err.statusCode,
         result: err.message,
       });
+    }
+  }
+
+  @Patch('/generateVRS')
+  async generateVRS(@Req() req: Request, @Res() res: Response){
+    try{
+      console.log('req.body', req.body)
+      const result = await this.ProposalService.getVRS(req.body.id, req.body.contractAddress, req.body.senderAddress)
+      console.log('Result from service ====', result)
+      res.status(200).send({ responseCode: 200, result })
+    }catch(err){
+      console.log('Error here', err.message)
+      res.status(err.responseCode).send({
+        responseCode: err.statusCode,
+        result: err.message
+      })
     }
   }
 

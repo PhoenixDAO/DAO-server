@@ -22,11 +22,14 @@ import {
 } from '../contracts/contracts';
 import axios from 'axios';
 import { type } from 'os';
+const { ecsign } = require("ethereumjs-util");
 
 // const fs = require('fs')
 // const axios = require('axios');
 const Web3 = require('web3');
 const moment = require('moment');
+
+const { defaultAbiCoder, keccak256, solidityPack } = require("ethers/lib/utils");
 // let parsed = JSON.parse(fs.readFileSync(PHNX_PROPOSAL_ABI))
 // let abi = parsed.abi
 
@@ -74,7 +77,7 @@ export class ProposalService {
   };
 
   postProposal = async (req, res) => {
-    console.log('Working in post proposal');
+    // console.log('Working in post proposal', req);
     console.log('In post proposal here 123');
     let serverDate = moment(Date.now()).format();
     console.log('Server Date =======>>', serverDate);
@@ -84,6 +87,7 @@ export class ProposalService {
         throw { statusCode: 404, message: 'User not found' };
       }
       const statusTest = 'Incomplete';
+      console.log(1)
       for (let i = 0; i < req.milestone.length; i++) {
         req.milestone[i].status = statusTest;
       }
@@ -91,17 +95,20 @@ export class ProposalService {
       if (Attributes.length == 0) {
         throw { statusCode: 404, message: 'No attributes found!' };
       }
+      console.log(2)
       const data = {
         ...req,
         minimumUpvotes: Attributes[0].minimumUpvotes,
       };
       const createdProposal = await this.proposalModel.create(data);
+      // console.log('Created Proposal', createdProposal)
       if (!createdProposal) {
         throw { statusCode: 404, message: 'Proposal not created' };
       }
 
       return createdProposal;
     } catch (err) {
+      console.log('In catch post proposal', err.message)
       throw err.message;
     }
   };
@@ -115,7 +122,7 @@ export class ProposalService {
     }
   };
   updateProposalStatus = async (id, req) => {
-    console.log('In update proposal status', req.body);
+    console.log('In update proposal status',id, req.body);
 
     // console.log('REQ ----->',id,req)
     // console.log('REQ ---->',req.body)
@@ -797,6 +804,19 @@ export class ProposalService {
     }
   };
 
+   getVRS(_id,_contractAddress,_senderAddress){
+     console.log('Get VRS',_id, _contractAddress, _senderAddress)
+    const DomainSeparator = keccak256(defaultAbiCoder.encode(["string", "address"], ["0x01", _contractAddress]));
+    var message = keccak256(    
+    defaultAbiCoder.encode(["string", "address"], [_id, _senderAddress]));
+    var finalHash = keccak256(
+        solidityPack(["bytes1", "bytes1", "bytes32", "bytes32"], ["0x19", "0x01", DomainSeparator, message]),
+      );
+      const { v, r, s } = ecsign(Buffer.from(finalHash.slice(2), "hex"), Buffer.from(process.env.adminPrivateKey.slice(2), "hex"));
+      console.log(v,r,s);
+      return {v:v,r:'0x'+r.toString('hex'),s:'0x'+s.toString('hex')}  
+}
+
   sendMail = async req => {
     try {
       const emailResult = await this.NodemailerService.sendTestMail(req);
@@ -806,8 +826,37 @@ export class ProposalService {
     }
   };
 
-  @Cron('*/6 * * * * *')
-  testing() {
-    // console.log('Cron job');
-  }
+  // updateProposalsBySmartContractId = async id => {
+  //   // console.log('UpdateProposalsBySmartContract', id)
+  //   console.log('update proposal by smart contract running', id)
+  //   try {
+  //     // const res = await this.proposalModel.find({ smartContractID: id})
+  //     // console.log('Res =====>>>', res)
+      
+  //     const result = await this.proposalModel.findOneAndUpdate({ smartContractID: id }, {
+  //       $set: { status: 'Pending' }
+  //     })
+
+  //     // const result2 = await this.proposalModel.find({
+  //     //   smartContract: id,
+  //     // })
+
+  //     // for(let i=0; i<=result2.length; i++){
+  //     //   if(result2[i].smartContractID == id && result2[i].status == 'InTransaction'){
+  //     //     console.log('In if',id)
+  //     //     await this.proposalModel.findOneAndDelete({ smartContractID: id }, {useFindAndModify: false})
+  //     //   }
+  //     // }
+      
+  //     console.log('Result UPSC', result)
+  //     return 'result';
+  //   } catch (err) {
+  //     throw 'An error occured';
+  //   }
+  // };
+
+  // @Cron('*/6 * * * * *')
+  // testing() {
+  //   // console.log('Cron job');
+  // }
 }

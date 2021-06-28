@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, Patch } from '@nestjs/common';
 import { StakeService } from './stake.service';
 import { Request, Response } from 'express';
 
@@ -44,6 +44,23 @@ export class StakeController {
   async getStakeById(@Req() req: Request, @Res() res: Response) {
     try {
       const stake = await this.stakeService.getStakeById(req.params.id);
+      res.status(200).send({
+        responseCode: 200,
+        result: stake,
+      });
+    } catch (error) {
+      res.status(error.statusCode).send({
+        responseCode: error.statusCode,
+        result: error.message,
+      });
+    }
+  }
+
+  @Patch('/getReceipt')
+  async getTxReceipt(@Req() req: Request, @Res() res: Response) {
+    console.log('Working')
+    try {
+      const stake = await this.stakeService.getTxReceipt(req);
       res.status(200).send({
         responseCode: 200,
         result: stake,

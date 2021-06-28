@@ -19,6 +19,7 @@ import { AdminModule } from './admin/admin.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
 import { NodemailerService } from './nodemailer/nodemailer.service';
+import { ProposalService } from './proposal/proposal.service'
 // import { BlockModule } from './block/block.module';
 
 @Module({
@@ -28,6 +29,8 @@ import { NodemailerService } from './nodemailer/nodemailer.service';
     MongooseModule.forRoot(process.env.DATABASE_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
     }),
     UserModule,
     ProposalModule,
@@ -51,7 +54,9 @@ export class AppModule implements NestModule {
         { path: 'auth/metamask', method: RequestMethod.ALL },
         { path: 'proposal/sendMail', method: RequestMethod.ALL },
         { path: 'test', method: RequestMethod.ALL },
-        { path: 'user/findUserByNumioId/', method: RequestMethod.ALL },
+        { path: 'user/findUserByNumioId/:id', method: RequestMethod.ALL },       
+        { path: 'proposal/generateVRS', method: RequestMethod.ALL },
+        { path: 'stake/getReceipt', method: RequestMethod.ALL },     
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }

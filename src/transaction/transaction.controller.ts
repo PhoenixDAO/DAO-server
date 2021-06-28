@@ -10,8 +10,9 @@ export class TransactionController {
   // Here we create a new transaction
   @Post('/')
   async addTransaction(@Req() req: Request, @Res() res: Response) {
+    console.log('REQ in TX controller', req.body)
     try {
-      const result = await this.transactionService.createTransaction(req.body.TxHash, req.body.type, req.body.numioAddress, req.body.Id);
+      const result = await this.transactionService.createTransaction(req.body.TxHash, req.body.type, req.body.numioAddress, req.body.id);
       res.status(200).send({
         responseCode: 200,
         result: result,
