@@ -378,7 +378,7 @@ export class CronService {
     );
     // console.log(2);
     const result = await this.blockModel.find();
-    console.log('Result [][]', result)
+    // console.log('Result [][]', result)
     contract.getPastEvents(
       'ProposalSubmitted',
       {

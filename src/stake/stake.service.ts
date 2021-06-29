@@ -46,14 +46,12 @@ export class StakeService {
         numioId: user.numioId,
       });
       
-      console.log(2)
       console.log('User exist //////', userExist);
       if (!userExist) {
         throw { statusCode: 400, message: 'User does not exist' };
       }
 
       
-      console.log(3)
       // PROPOSAL ID MUST BE VALID
 
       if (!proposalId) {
@@ -70,8 +68,6 @@ export class StakeService {
         };
       }
 
-      
-      console.log(4)
 
       // PROPOSAL STATUS MUST BE VOTING
 
@@ -105,15 +101,17 @@ export class StakeService {
       }
 
       
-      console.log(7)
       const txReceipt = await this.getTxReceipt(TxHash)
-
-      console.log('Tx Receipt', txReceipt.to.toLowerCase(), txReceipt.from.toLowerCase())
-      console.log('Data', PHNX_STAKING_ADDRESS.toLowerCase(), user.numioAddress.toLowerCase())
-      if(txReceipt.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txReceipt.from.toLowerCase() != user.numioAddress.toLowerCase()){
+      console.log('TX receipt',txReceipt)
+      // console.log('Tx Receipt', txReceipt.to.toLowerCase(), txReceipt.from.toLowerCase())
+      // console.log('Data', PHNX_STAKING_ADDRESS.toLowerCase(), user.numioAddress.toLowerCase())
+      if(
+        txReceipt.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txReceipt.from.toLowerCase() != user.numioAddress.toLowerCase()
+        || (txReceipt.data.slice(0,10) != '0xd3599fdf')
+        ){
         throw 'Invalid transaction'
       }
-      
+      throw 'Remove this command'
       // CREATING STAKE DOCUMENT AND SAVING IN DATABASE
 
       const newStake = new this.stakeModel({

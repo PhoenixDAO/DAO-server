@@ -78,7 +78,7 @@ export class UserService {
       //   return { statusCode: 400, message: 'No user found' };
       // }
       console.log('User', userExist)
-      if(userExist.length >= 1 && userExist[0].numioAddress == req.body.address){
+      if(userExist.length >= 1 && userExist[0].numioAddress == req.body.address && userExist[0].numioId == req.params.id){
         console.log('True')
         return true;
       }
