@@ -111,7 +111,6 @@ export class StakeService {
         ){
         throw 'Invalid transaction'
       }
-      throw 'Remove this command'
       // CREATING STAKE DOCUMENT AND SAVING IN DATABASE
 
       const newStake = new this.stakeModel({
