@@ -60,7 +60,7 @@ export class StakeController {
   async getTxReceipt(@Req() req: Request, @Res() res: Response) {
     console.log('Working')
     try {
-      const stake = await this.stakeService.getTxReceipt(req);
+      const stake = await this.stakeService.getTransaction(req);
       res.status(200).send({
         responseCode: 200,
         result: stake,

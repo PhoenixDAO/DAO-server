@@ -101,13 +101,13 @@ export class StakeService {
       }
 
       
-      const txReceipt = await this.getTxReceipt(TxHash)
-      console.log('TX receipt',txReceipt)
+      const txData = await this.getTransaction(TxHash)
+      console.log('TX receipt',txData)
       // console.log('Tx Receipt', txReceipt.to.toLowerCase(), txReceipt.from.toLowerCase())
       // console.log('Data', PHNX_STAKING_ADDRESS.toLowerCase(), user.numioAddress.toLowerCase())
       if(
-        txReceipt.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txReceipt.from.toLowerCase() != user.numioAddress.toLowerCase()
-        || (txReceipt.input.slice(0,10) != '0x69619aaf')
+        txData.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txData.from.toLowerCase() != user.numioAddress.toLowerCase()
+        || (txData.input.slice(0,10) != '0x69619aaf')
         ){
         throw 'Invalid transaction'
       }
@@ -207,16 +207,16 @@ export class StakeService {
     }
   }
 
-  async getTxReceipt(txHash: any){
+  async getTransaction(txHash: any){
     console.log('Service working')
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
       'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
     );
     console.log(2)
-    const txReceipt = await web3.eth.getTransaction(txHash)
+    const txData = await web3.eth.getTransaction(txHash)
 
-      console.log('Tx Receipt', txReceipt)
-      return txReceipt
+      console.log('Tx Data', txData)
+      return txData
   }
 }
