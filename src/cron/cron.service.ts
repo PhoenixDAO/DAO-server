@@ -417,7 +417,7 @@ export class CronService {
           }
         } else {
           // console.log(6);
-          console.log('In else err', err);
+          console.log('In else get past events err', err);
         }
       },
     );

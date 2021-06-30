@@ -107,10 +107,12 @@ export class StakeService {
       // console.log('Data', PHNX_STAKING_ADDRESS.toLowerCase(), user.numioAddress.toLowerCase())
       if(
         txReceipt.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txReceipt.from.toLowerCase() != user.numioAddress.toLowerCase()
-        || (txReceipt.data.slice(0,10) != '0xd3599fdf')
+        || (txReceipt.input.slice(0,10) != '0x69619aaf')
         ){
         throw 'Invalid transaction'
       }
+
+      // throw 'Remove this command'
       // CREATING STAKE DOCUMENT AND SAVING IN DATABASE
 
       const newStake = new this.stakeModel({
@@ -212,7 +214,7 @@ export class StakeService {
       'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
     );
     console.log(2)
-    const txReceipt = await web3.eth.getTransactionReceipt(txHash)
+    const txReceipt = await web3.eth.getTransaction(txHash)
 
       console.log('Tx Receipt', txReceipt)
       return txReceipt
