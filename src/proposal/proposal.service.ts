@@ -285,17 +285,17 @@ export class ProposalService {
       PHNX_PROPOSAL_ADDRESS,
     );
     try {
-      
+      console.log(1)
       let pr_key = process.env.adminPrivateKey;
       let count = await web3.eth.getTransactionCount(
-        pr_key,
+        '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
         'pending',
       );
       let gasPrices = await this.getCurrentGasPrices();
       console.log(gasPrices);
       console.log('Working');
       let rawTransaction = {
-        from: pr_key,
+        from: '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
         to: PHNX_PROPOSAL_ADDRESS,
         data: contract.methods.updateProposalStatus(id, 2).encodeABI(),
         gasPrice: gasPrices.high * 1000000000,
