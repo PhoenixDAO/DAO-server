@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Get, Req, Res, Put } from '@nestjs/common';
+import { Controller, Get, Req, Res, Put, Post } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { Request, Response } from 'express';
 
@@ -44,6 +44,22 @@ export class AdminController {
   async getAllPendingMilestones(@Req() req: Request, @Res() res: Response) {
     try {
       const milestones = await this.adminService.getAllPendingMilestones();
+      res.status(200).send({
+        responseCode: 200,
+        result: milestones,
+      });
+    } catch (error) {
+      res.status(error.statusCode).send({
+        responseCode: error.statusCode,
+        result: error.message,
+      });
+    }
+  }
+
+  @Post('/createDAOAttributes')
+  async createDAOAttributes(@Req() req: Request, @Res() res: Response) {
+    try {
+      const milestones = await this.adminService.createDAOAttributes(req);
       res.status(200).send({
         responseCode: 200,
         result: milestones,

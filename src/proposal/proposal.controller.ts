@@ -3,12 +3,22 @@
 import { Request, Response } from 'express';
 import { ProposalService } from './proposal.service';
 import { Controller, Get, Post, Req, Res, Delete, Put, Patch } from '@nestjs/common';
+import { decryptData } from '../jwt/index'
 @Controller('proposal')
 export class ProposalController {
   constructor(private readonly ProposalService: ProposalService) {}
   // Here we get ALL proposals from the database
   @Get()
   async getAllProposals(@Req() req: Request, @Res() res: Response) {
+    // var ipAddr: any = req.headers["x-forwarded-for"];
+    // if (ipAddr){
+    //   var list = ipAddr.split(",");
+    //   ipAddr = list[list.length-1];
+    //   console.log('ip Addr if', ipAddr)
+    // } else {
+    //   ipAddr = req.connection.remoteAddress;
+    //   console.log('Ip addr else', ipAddr)
+    // }
     try {
       const result = await this.ProposalService.getAllProposals();
       if (result.length == 0) {
@@ -33,7 +43,11 @@ export class ProposalController {
   @Post('')
   async postProposal(@Req() req: Request, @Res() res: Response) {
     try {
-      const result = await this.ProposalService.postProposal(req.body, res);
+      // console.log('In controller', req.body.decodeToken)
+      let value = { encrypt : req.body }
+      const decrypt = await decryptData(value)
+      console.log('Res', decrypt)
+      const result = await this.ProposalService.postProposal(decrypt, res);
       res.status(200).send({
         responseCode: 200,
         result: result,

@@ -57,6 +57,7 @@ export class AppModule implements NestModule {
         { path: 'user/findUserByNumioId/:id', method: RequestMethod.ALL },       
         { path: 'proposal/generateVRS', method: RequestMethod.ALL },
         { path: 'stake/getReceipt', method: RequestMethod.ALL },     
+        { path: 'proposal/createBlock', method: RequestMethod.ALL },           
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }

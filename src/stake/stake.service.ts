@@ -7,7 +7,7 @@ import { ProposalService } from '../proposal/proposal.service';
 import { TransactionService } from '../transaction/transaction.service';
 import { User } from 'src/user/user.model';
 import { Proposal } from 'src/proposal/proposal.model';
-import { PHNX_STAKING_ADDRESS } from 'src/contracts/contracts';
+import { PHNX_PROPOSAL_ADDRESS, PHNX_STAKING_ADDRESS } from 'src/contracts/contracts';
 const Web3 = require('web3');
 
 @Injectable()
@@ -106,8 +106,8 @@ export class StakeService {
       // console.log('Tx Receipt', txReceipt.to.toLowerCase(), txReceipt.from.toLowerCase())
       // console.log('Data', PHNX_STAKING_ADDRESS.toLowerCase(), user.numioAddress.toLowerCase())
       if(
-        txData.to.toLowerCase() != PHNX_STAKING_ADDRESS.toLowerCase() || txData.from.toLowerCase() != user.numioAddress.toLowerCase()
-        || (txData.input.slice(0,10) != '0x69619aaf')
+        txData.to.toLowerCase() != PHNX_PROPOSAL_ADDRESS.toLowerCase() || txData.from.toLowerCase() != user.numioAddress.toLowerCase()
+        || (txData.input.slice(0,10) != '0xb384abef')
         ){
         throw 'Invalid transaction'
       }

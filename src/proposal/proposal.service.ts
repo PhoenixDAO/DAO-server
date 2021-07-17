@@ -78,7 +78,7 @@ export class ProposalService {
 
   postProposal = async (req, res) => {
     // console.log('Working in post proposal', req);
-    console.log('In post proposal here 123');
+    console.log('In post proposal here 123', req);
     let serverDate = moment(Date.now()).format();
     console.log('Server Date =======>>', serverDate);
     try {
@@ -286,22 +286,23 @@ export class ProposalService {
       PHNX_PROPOSAL_ADDRESS,
     );
     try {
+      
+      let pr_key = process.env.adminPrivateKey;
       let count = await web3.eth.getTransactionCount(
-        '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
+        pr_key,
         'pending',
       );
       let gasPrices = await this.getCurrentGasPrices();
       console.log(gasPrices);
       console.log('Working');
       let rawTransaction = {
-        from: '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
+        from: pr_key,
         to: PHNX_PROPOSAL_ADDRESS,
         data: contract.methods.updateProposalStatus(id, 2).encodeABI(),
         gasPrice: gasPrices.high * 1000000000,
         nonce: count,
         gasLimit: web3.utils.toHex(2000000),
       };
-      let pr_key = process.env.adminPrivateKey;
       let signed = await web3.eth.accounts.signTransaction(
         rawTransaction,
         pr_key,

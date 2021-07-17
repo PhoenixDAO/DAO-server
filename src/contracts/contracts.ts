@@ -6,10 +6,11 @@ export const PHNX_PROPOSAL_ADDRESS =
   // '0x7415eA5df0870fBcab3027c334e268F50B40ADf5';
   // "0x7c29A078fa3623Ee566D0D7543DC046d53C79523";
   // "0xc74367CcaAb0dfCAA1db102524bBA46725AEb502";
-  '0xB56a23E41179c1f011d55dEa8f69928743e4d0Ff'
-
+  // '0xB56a23E41179c1f011d55dEa8f69928743e4d0Ff'
+'0xfa3Ce6Dd9b0E1C725fc0e91A556191f31E38De9D'
   export const PHNX_STAKING_ADDRESS =
-  '0xc53E8ab88a91d16A669Fd5D2ADA12807125194f5';
+  // '0xc53E8ab88a91d16A669Fd5D2ADA12807125194f5';
+  '0xDc6010328c57999df231AF58e29FF60DCa7f8A2E'
   export const PHNX_PROPOSAL_ABI = [
     {
       "anonymous": false,
@@ -281,6 +282,19 @@ export const PHNX_PROPOSAL_ADDRESS =
       "type": "function"
     },
     {
+      "inputs": [],
+      "name": "daoStakeContract",
+      "outputs": [
+        {
+          "internalType": "contract IDaoStakeContract",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [
         {
           "internalType": "address",
@@ -290,6 +304,11 @@ export const PHNX_PROPOSAL_ADDRESS =
         {
           "internalType": "address",
           "name": "_signer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_daoStakeContract",
           "type": "address"
         }
       ],
@@ -345,6 +364,19 @@ export const PHNX_PROPOSAL_ADDRESS =
           "internalType": "bool",
           "name": "",
           "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "phnxContract",
+      "outputs": [
+        {
+          "internalType": "contract IERC20",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -560,6 +592,24 @@ export const PHNX_PROPOSAL_ADDRESS =
         }
       ],
       "name": "updateProposalStatus",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_altQuantity",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "_time",
+          "type": "uint256"
+        }
+      ],
+      "name": "vote",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

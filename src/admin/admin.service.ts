@@ -64,6 +64,16 @@ export class AdminService {
       throw err;
     }
   }
+
+  async createDAOAttributes(req){
+    try{
+      const result = await this.DAOAttributesModel.create(req.body)
+      console.log(req.body)
+    }catch(err){
+        throw err
+    }
+  }
+
   async getAllPendingMilestones() {
     try {
       const milestones = [];

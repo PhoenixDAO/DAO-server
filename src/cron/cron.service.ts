@@ -40,6 +40,7 @@ export class CronService {
     this.getEvents();
   }
 
+
   getCurrentGasPrices = async () => {
     try {
       let response = await axios.get(
@@ -366,7 +367,7 @@ export class CronService {
   // }
 
   getEvents = async () => {
-    console.log('Get events working')
+    // console.log('Get events working')
     // console.log(1);
     let web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/c89f216154d84b83bb9344a7d0a91108',
