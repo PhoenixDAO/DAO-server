@@ -23,7 +23,7 @@ import {
 import axios from 'axios';
 import { type } from 'os';
 const { ecsign } = require("ethereumjs-util");
-
+import { encryptData ,decryptData } from '../jwt'
 // const fs = require('fs')
 // const axios = require('axios');
 const Web3 = require('web3');
@@ -78,7 +78,7 @@ export class ProposalService {
 
   postProposal = async (req, res) => {
     // console.log('Working in post proposal', req);
-    console.log('In post proposal here 123', req);
+    console.log('In post proposal here 123');
     let serverDate = moment(Date.now()).format();
     console.log('Server Date =======>>', serverDate);
     try {
@@ -105,7 +105,6 @@ export class ProposalService {
       if (!createdProposal) {
         throw { statusCode: 404, message: 'Proposal not created' };
       }
-
       return createdProposal;
     } catch (err) {
       console.log('In catch post proposal', err.message)

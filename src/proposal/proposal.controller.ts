@@ -3,7 +3,7 @@
 import { Request, Response } from 'express';
 import { ProposalService } from './proposal.service';
 import { Controller, Get, Post, Req, Res, Delete, Put, Patch } from '@nestjs/common';
-import { decryptData } from '../jwt/index'
+import { encryptData, decryptData } from '../jwt/index'
 @Controller('proposal')
 export class ProposalController {
   constructor(private readonly ProposalService: ProposalService) {}
@@ -48,9 +48,12 @@ export class ProposalController {
       const decrypt = await decryptData(value)
       console.log('Res', decrypt)
       const result = await this.ProposalService.postProposal(decrypt, res);
+      console.log('Result after in controller', result)
+      const encryptedData =  await encryptData(result)
+      console.log('Encry ====[][][]',encryptedData)
       res.status(200).send({
         responseCode: 200,
-        result: result,
+        result: encryptedData,
       });
     } catch (err) {
       res.status(400).send({
