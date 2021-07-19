@@ -674,9 +674,9 @@ export class ProposalService {
     }
   };
 
-  updateProposal = async req => {
-    console.log('Working in UpdateProposal');
-    console.log('Working', req.params.id);
+  updateProposal = async (req, id) => {
+    // console.log('Working in UpdateProposal', req.params);
+    // console.log('Working', req.params.id);
     let serverDate = moment(Date.now()).format();
     const Attributes = await this.DAOAttributesModel.find().exec();
     console.log('DAO ATTRIBUTES ===>>>', Attributes);
@@ -686,7 +686,7 @@ export class ProposalService {
     );
     console.log('Server date ======////', serverDate);
     try {
-      const proposal = await this.proposalModel.findById(req.params.id);
+      const proposal = await this.proposalModel.findById(id);
       if (!proposal) {
         throw { statusCode: 404, message: 'Proposal not found!' };
       }
@@ -760,7 +760,6 @@ export class ProposalService {
           },
           { runValidators: true, new: true },
         );
-      console.log('updated', updateProposal);
       return updateProposal;
     } catch (err) {
       throw err;

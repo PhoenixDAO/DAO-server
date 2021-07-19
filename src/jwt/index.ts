@@ -4,6 +4,7 @@ let jwt = require('jsonwebtoken')
 
 
 export const encryptData = async (data) => {
+    console.log('Data in jwt middleware', data)
     let ecryptedData 
     try{
         console.log('Request abc   ', data)
@@ -17,14 +18,12 @@ export const encryptData = async (data) => {
    }
 
 export const  decryptData = async (data: any) => {
+    console.log('Data in jwt', data)
     try{
-        console.log('Decrypt data running', data.encrypt.value)
         const bearer = data.encrypt.value.split(' ');
         console.log('Bearer', bearer)
         const token = bearer[0];
         const decryptData = jwt.verify(token, key);
-        // let decryptedData = await jwt.decode(data, key)
-        console.log(decryptData)
         return decryptData
 
     }catch(err){

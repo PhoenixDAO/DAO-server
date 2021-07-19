@@ -257,8 +257,21 @@ export class ProposalController {
   @Put('/updateProposal/:id')
   async updateProposal(@Req() req: Request, @Res() res: Response) {
     try {
-      const result = await this.ProposalService.updateProposal(req);
-      res.status(200).send({ responseCode: 200, result: result });
+      let value = { encrypt : req.body }
+      console.log('In update proposal controller', value)
+      const decrypt = await decryptData(value)
+      console.log('In update proposal controller decrypt', decrypt)
+     
+      let value2 = { body: decrypt }
+      let value3 = { encrypt: {value: req.params.id } }
+      console.log('Last console')
+      const decryptedId = await decryptData(value3)
+
+      const result = await this.ProposalService.updateProposal(value2, decryptedId);
+      console.log('Result after in controller', result)
+      const encryptedData =  await encryptData(result)
+      console.log('Encry ====[][][]',encryptedData)
+      res.status(200).send({ responseCode: 200, result: encryptedData });
     } catch (err) {
       console.log('err', err);
       res.status(400).send({
