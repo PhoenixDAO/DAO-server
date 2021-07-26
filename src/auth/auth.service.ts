@@ -36,7 +36,7 @@ export class AuthService {
     }
   }
   async loginWithNumio(req) {
-    console.log('In login with Numio', req.body);
+    console.log('In login with Numio', req.body.token, req.body.app_secret);
     try {
       const temp = {
         token: req.body.token,

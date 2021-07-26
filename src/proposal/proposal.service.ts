@@ -46,7 +46,8 @@ export class ProposalService {
   ) {}
 
   getAllProposals = async () => {
-    console.log('Working here');
+    console.log('In get all proposals');
+    console.log('Working')
     try {
       let proposals = await this.proposalModel.find();
       let serverDate = moment(Date.now()).format();
@@ -65,7 +66,7 @@ export class ProposalService {
         }
       }
       proposals = await this.proposalModel.find();
-
+      // console.log('Proposals', proposals)
       if (proposals.length !== 0) {
         return proposals;
       } else {
@@ -679,12 +680,12 @@ export class ProposalService {
     // console.log('Working', req.params.id);
     let serverDate = moment(Date.now()).format();
     const Attributes = await this.DAOAttributesModel.find().exec();
-    console.log('DAO ATTRIBUTES ===>>>', Attributes);
-    console.log(
-      'Attributes MINIMUMUPVOTES // ////',
-      Attributes[0].minimumUpvotes,
-    );
-    console.log('Server date ======////', serverDate);
+    // console.log('DAO ATTRIBUTES ===>>>', Attributes);
+    // console.log(
+    //   'Attributes MINIMUMUPVOTES // ////',
+    //   Attributes[0].minimumUpvotes,
+    // );
+    // console.log('Server date ======////', serverDate);
     try {
       const proposal = await this.proposalModel.findById(id);
       if (!proposal) {
