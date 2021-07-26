@@ -257,6 +257,7 @@ export class ProposalController {
   @Put('/updateProposal/:id')
   async updateProposal(@Req() req: Request, @Res() res: Response) {
     try {
+      console.log('Running')
       let value = { encrypt : req.body }
       console.log('In update proposal controller', value)
       const decrypt = await decryptData(value)
