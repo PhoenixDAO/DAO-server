@@ -14,7 +14,6 @@ import { DAOAttributes } from '../admin/admin.model';
 import { EDESTADDRREQ } from 'constants';
 import { NodemailerService } from '../nodemailer/nodemailer.service';
 import { Cron } from '@nestjs/schedule';
-
 //import Web3 from 'web3'
 import {
   PHNX_PROPOSAL_ABI,
@@ -22,14 +21,18 @@ import {
 } from '../contracts/contracts';
 import axios from 'axios';
 import { type } from 'os';
-const { ecsign } = require("ethereumjs-util");
-import { encryptData ,decryptData } from '../jwt'
+const { ecsign } = require('ethereumjs-util');
+import { encryptData, decryptData } from '../jwt';
 // const fs = require('fs')
 // const axios = require('axios');
 const Web3 = require('web3');
 const moment = require('moment');
 
-const { defaultAbiCoder, keccak256, solidityPack } = require("ethers/lib/utils");
+const {
+  defaultAbiCoder,
+  keccak256,
+  solidityPack,
+} = require('ethers/lib/utils');
 // let parsed = JSON.parse(fs.readFileSync(PHNX_PROPOSAL_ABI))
 // let abi = parsed.abi
 
@@ -47,7 +50,7 @@ export class ProposalService {
 
   getAllProposals = async () => {
     console.log('In get all proposals');
-    console.log('Working')
+    console.log('Working');
     try {
       let proposals = await this.proposalModel.find();
       let serverDate = moment(Date.now()).format();
@@ -88,7 +91,7 @@ export class ProposalService {
         throw { statusCode: 404, message: 'User not found' };
       }
       const statusTest = 'Incomplete';
-      console.log(1)
+      console.log(1);
       for (let i = 0; i < req.milestone.length; i++) {
         req.milestone[i].status = statusTest;
       }
@@ -96,7 +99,7 @@ export class ProposalService {
       if (Attributes.length == 0) {
         throw { statusCode: 404, message: 'No attributes found!' };
       }
-      console.log(2)
+      console.log(2);
       const data = {
         ...req,
         minimumUpvotes: Attributes[0].minimumUpvotes,
@@ -108,7 +111,7 @@ export class ProposalService {
       }
       return createdProposal;
     } catch (err) {
-      console.log('In catch post proposal', err.message)
+      console.log('In catch post proposal', err.message);
       throw err.message;
     }
   };
@@ -116,13 +119,14 @@ export class ProposalService {
   getProposalsById = async id => {
     try {
       const result = await this.proposalModel.findById(id);
+      console.log('result', result);
       return result;
     } catch (err) {
       throw 'No Proposal Found';
     }
   };
   updateProposalStatus = async (id, req) => {
-    console.log('In update proposal status',id, req.body);
+    console.log('In update proposal status', id, req.body);
 
     // console.log('REQ ----->',id,req)
     // console.log('REQ ---->',req.body)
@@ -139,7 +143,13 @@ export class ProposalService {
       //     { runValidators: true, new: true },
       //   );
       // }
-
+      console.log('hello', req.body.decodeToken);
+      const { email } = req.body.decodeToken;
+      const user = await this.userModel.findOne({ email });
+      console.log(user);
+      if (!user.isAdmin) {
+        throw { statusCode: 401, message: 'Unauthroized' };
+      }
       let Attributes = [];
       const proposal = await this.proposalModel.findById(id);
       // console.log('proposal', proposal);
@@ -222,10 +232,15 @@ export class ProposalService {
     }
   };
 
-  getProposalByNumioAddress = async numioAddress => {
+  getProposalByNumioAddress = async (numioAddress, email) => {
     try {
+      const po = await this.userModel.findOne({ email });
+      console.log(po);
+      if (!po.numioAddress) {
+        throw { statusCode: 401, message: 'Unauthroized' };
+      }
       const result = await this.proposalModel.find({
-        numioAddress: numioAddress,
+        numioAddress: po.numioAddres,
       });
       if (result.length == 0) {
         throw { statusCode: 404, message: 'Not Proposal Found' };
@@ -286,7 +301,7 @@ export class ProposalService {
       PHNX_PROPOSAL_ADDRESS,
     );
     try {
-      console.log(1)
+      console.log(1);
       let pr_key = process.env.adminPrivateKey;
       let count = await web3.eth.getTransactionCount(
         '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
@@ -769,6 +784,10 @@ export class ProposalService {
 
   deleteProposal = async req => {
     try {
+      const { email } = req.body.decodeToken;
+      const user = await this.userModel.findOne({ email });
+      console.log(user);
+
       const proposal = await this.proposalModel.findById(req.params.id);
       if (!proposal) {
         throw { statusCode: 404, message: 'Proposal not found!' };
@@ -783,15 +802,17 @@ export class ProposalService {
           message: 'Proposal can not be deleted !',
         };
       }
-      const user = await this.userModel.findOne({
-        numioAddress: req.body.numioAddress,
-      });
+      // const user = await this.userModel.findOne({
+      //   numioAddress: req.body.numioAddress,
+      // });
+
       if (!user) {
         throw {
           statusCode: 404,
           message: 'User with provided numioAddress does not exist',
         };
       }
+      console.log(user.numioAddress , proposal.numioAddress)
       if (user.numioAddress != proposal.numioAddress) {
         throw { statusCode: 401, message: 'Unauthorized!' };
       }
@@ -804,18 +825,27 @@ export class ProposalService {
     }
   };
 
-   getVRS(_id,_contractAddress,_senderAddress){
-     console.log('Get VRS',_id, _contractAddress, _senderAddress)
-    const DomainSeparator = keccak256(defaultAbiCoder.encode(["string", "address"], ["0x01", _contractAddress]));
-    var message = keccak256(    
-    defaultAbiCoder.encode(["string", "address"], [_id, _senderAddress]));
+  getVRS(_id, _contractAddress, _senderAddress) {
+    console.log('Get VRS', _id, _contractAddress, _senderAddress);
+    const DomainSeparator = keccak256(
+      defaultAbiCoder.encode(['string', 'address'], ['0x01', _contractAddress]),
+    );
+    var message = keccak256(
+      defaultAbiCoder.encode(['string', 'address'], [_id, _senderAddress]),
+    );
     var finalHash = keccak256(
-        solidityPack(["bytes1", "bytes1", "bytes32", "bytes32"], ["0x19", "0x01", DomainSeparator, message]),
-      );
-      const { v, r, s } = ecsign(Buffer.from(finalHash.slice(2), "hex"), Buffer.from(process.env.adminPrivateKey.slice(2), "hex"));
-      console.log(v,r,s);
-      return {v:v,r:'0x'+r.toString('hex'),s:'0x'+s.toString('hex')}  
-}
+      solidityPack(
+        ['bytes1', 'bytes1', 'bytes32', 'bytes32'],
+        ['0x19', '0x01', DomainSeparator, message],
+      ),
+    );
+    const { v, r, s } = ecsign(
+      Buffer.from(finalHash.slice(2), 'hex'),
+      Buffer.from(process.env.adminPrivateKey.slice(2), 'hex'),
+    );
+    console.log(v, r, s);
+    return { v: v, r: '0x' + r.toString('hex'), s: '0x' + s.toString('hex') };
+  }
 
   sendMail = async req => {
     try {
@@ -832,7 +862,7 @@ export class ProposalService {
   //   try {
   //     // const res = await this.proposalModel.find({ smartContractID: id})
   //     // console.log('Res =====>>>', res)
-      
+
   //     const result = await this.proposalModel.findOneAndUpdate({ smartContractID: id }, {
   //       $set: { status: 'Pending' }
   //     })
@@ -847,7 +877,7 @@ export class ProposalService {
   //     //     await this.proposalModel.findOneAndDelete({ smartContractID: id }, {useFindAndModify: false})
   //     //   }
   //     // }
-      
+
   //     console.log('Result UPSC', result)
   //     return 'result';
   //   } catch (err) {

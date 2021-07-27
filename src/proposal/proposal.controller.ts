@@ -2,8 +2,19 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Request, Response } from 'express';
 import { ProposalService } from './proposal.service';
-import { Controller, Get, Post, Req, Res, Delete, Put, Patch } from '@nestjs/common';
-import { encryptData, decryptData } from '../jwt/index'
+import {
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  Delete,
+  Put,
+  Patch,
+} from '@nestjs/common';
+import { encryptData, decryptData } from '../jwt/index';
+import { validationJwt } from '../validation/index';
+
 @Controller('proposal')
 export class ProposalController {
   constructor(private readonly ProposalService: ProposalService) {}
@@ -44,13 +55,13 @@ export class ProposalController {
   async postProposal(@Req() req: Request, @Res() res: Response) {
     try {
       // console.log('In controller', req.body.decodeToken)
-      let value = { encrypt : req.body }
-      const decrypt = await decryptData(value)
-      console.log('Res', decrypt)
+      let value = { encrypt: req.body };
+      const decrypt = await decryptData(value);
+      console.log('Res', decrypt);
       const result = await this.ProposalService.postProposal(decrypt, res);
-      console.log('Result after in controller', result)
-      const encryptedData =  await encryptData(result)
-      console.log('Encry ====[][][]',encryptedData)
+      console.log('Result after in controller', result);
+      const encryptedData = await encryptData(result);
+      console.log('Encry ====[][][]', encryptedData);
       res.status(200).send({
         responseCode: 200,
         result: encryptedData,
@@ -134,8 +145,10 @@ export class ProposalController {
   @Post('/getByNumioAddress')
   async getByNumioAddress(@Req() req: Request, @Res() res: Response) {
     try {
+      const { email } = req.body.decodeToken;
       const result = await this.ProposalService.getProposalByNumioAddress(
         req.body.numioAddress,
+        email
       );
 
       res.status(200).send({
@@ -257,21 +270,24 @@ export class ProposalController {
   @Put('/updateProposal/:id')
   async updateProposal(@Req() req: Request, @Res() res: Response) {
     try {
-      console.log('Running')
-      let value = { encrypt : req.body }
-      console.log('In update proposal controller', value)
-      const decrypt = await decryptData(value)
-      console.log('In update proposal controller decrypt', decrypt)
-     
-      let value2 = { body: decrypt }
-      let value3 = { encrypt: {value: req.params.id } }
-      console.log('Last console')
-      const decryptedId = await decryptData(value3)
+      console.log('Running');
+      let value = { encrypt: req.body };
+      console.log('In update proposal controller', value);
+      const decrypt = await decryptData(value);
+      console.log('In update proposal controller decrypt', decrypt);
 
-      const result = await this.ProposalService.updateProposal(value2, decryptedId);
-      console.log('Result after in controller', result)
-      const encryptedData =  await encryptData(result)
-      console.log('Encry ====[][][]',encryptedData)
+      let value2 = { body: decrypt };
+      let value3 = { encrypt: { value: req.params.id } };
+      console.log('Last console');
+      const decryptedId = await decryptData(value3);
+
+      const result = await this.ProposalService.updateProposal(
+        value2,
+        decryptedId,
+      );
+      console.log('Result after in controller', result);
+      const encryptedData = await encryptData(result);
+      console.log('Encry ====[][][]', encryptedData);
       res.status(200).send({ responseCode: 200, result: encryptedData });
     } catch (err) {
       console.log('err', err);
@@ -297,18 +313,22 @@ export class ProposalController {
   }
 
   @Patch('/generateVRS')
-  async generateVRS(@Req() req: Request, @Res() res: Response){
-    try{
-      console.log('req.body', req.body)
-      const result = await this.ProposalService.getVRS(req.body.id, req.body.contractAddress, req.body.senderAddress)
-      console.log('Result from service ====', result)
-      res.status(200).send({ responseCode: 200, result })
-    }catch(err){
-      console.log('Error here', err.message)
+  async generateVRS(@Req() req: Request, @Res() res: Response) {
+    try {
+      console.log('req.body', req.body);
+      const result = await this.ProposalService.getVRS(
+        req.body.id,
+        req.body.contractAddress,
+        req.body.senderAddress,
+      );
+      console.log('Result from service ====', result);
+      res.status(200).send({ responseCode: 200, result });
+    } catch (err) {
+      console.log('Error here', err.message);
       res.status(err.responseCode).send({
         responseCode: err.statusCode,
-        result: err.message
-      })
+        result: err.message,
+      });
     }
   }
 
