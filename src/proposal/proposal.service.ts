@@ -236,11 +236,11 @@ export class ProposalService {
     try {
       const po = await this.userModel.findOne({ email });
       console.log(po);
-      if (!po.numioAddress) {
+      if (!po.numioAddress || po.numioAddress !== numioAddress) {
         throw { statusCode: 401, message: 'Unauthroized' };
       }
       const result = await this.proposalModel.find({
-        numioAddress: po.numioAddres,
+        numioAddress: po.numioAddress,
       });
       if (result.length == 0) {
         throw { statusCode: 404, message: 'Not Proposal Found' };
