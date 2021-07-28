@@ -353,6 +353,10 @@ export class ProposalService {
     console.log('Status', req.body);
     let blockChainResult;
     try {
+
+      const { email } = req.body.decodeToken;
+      const user = await this.userModel.find({ email });
+      console.log(user);
       const proposal = await this.proposalModel.findById(req.params.id);
       console.log('Proposal', proposal);
 
@@ -383,17 +387,17 @@ export class ProposalService {
       }
       //  console.log('Hello')
 
-      const checkUserExist = await this.userModel.find({
-        numioId: req.body.numioId,
-      });
-      if (checkUserExist.length == 0) {
+      // const checkUserExist = await this.userModel.find({
+      //   numioId: req.body.numioId,
+      // });
+      if (user.length == 0) {
         console.log('In  if');
         //    console.log('In if 4')
         throw { statusCode: 400, message: 'User does not exist' };
       }
       const check = proposal.votes.some(el => {
         //Here is the name validation (A user cannot vote twice)
-        if (el.numioId == req.body.numioId) {
+        if (el.numioId == user[0].numioId) {
           //  console.log('In if 5')
           throw { statusCode: 400, message: 'User cannot vote again' };
         }
@@ -433,7 +437,7 @@ export class ProposalService {
         req.params.id,
         {
           $push: {
-            votes: { date: Date.now(), numioId: req.body.numioId },
+            votes: { date: Date.now(), numioId: user[0].numioId },
           },
         },
         { runValidators: true, new: true },
@@ -442,7 +446,7 @@ export class ProposalService {
       console.log('Result numioId', result);
 
       const result2 = await this.userModel.findOneAndUpdate(
-        { numioId: req.body.numioId },
+        { numioId: user[0].numioId },
         { $push: { proposalVote: result._id } },
       );
 
@@ -660,12 +664,13 @@ export class ProposalService {
 
   updateProposalEstCompleteDateAndGitHubLink = async req => {
     try {
+      const { email } = req.body.decodeToken;
       const proposal = await this.proposalModel.findById(req.params.id);
       if (!proposal) {
         throw { statusCode: 404, message: 'Proposal not found!' };
       }
       const user = await this.userModel.findOne({
-        numioAddress: req.body.numioAddress,
+        email,
       });
       if (!user) {
         throw {
@@ -812,8 +817,8 @@ export class ProposalService {
           message: 'User with provided numioAddress does not exist',
         };
       }
-      console.log(user.numioAddress , proposal.numioAddress)
-      if (user.numioAddress != proposal.numioAddress) {
+      console.log(user.numioAddress, proposal.numioAddress);
+      if (user.numioAddress !== proposal.numioAddress) {
         throw { statusCode: 401, message: 'Unauthorized!' };
       }
       const deletedProposal = await this.proposalModel.findOneAndDelete({

@@ -13,7 +13,6 @@ import {
   Patch,
 } from '@nestjs/common';
 import { encryptData, decryptData } from '../jwt/index';
-import { validationJwt } from '../validation/index';
 
 @Controller('proposal')
 export class ProposalController {
