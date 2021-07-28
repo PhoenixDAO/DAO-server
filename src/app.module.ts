@@ -27,6 +27,7 @@ import { ProposalService } from './proposal/proposal.service'
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
     MongooseModule.forRoot(process.env.DATABASE_URL, {
+      entities: ['src/**/**.entity{.ts,.js}'], // <-- replace it to 'dist/**/**.entity.js' in prod mode or use relative path
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
