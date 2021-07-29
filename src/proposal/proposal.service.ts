@@ -414,7 +414,7 @@ export class ProposalService {
       //  Change this, commented the above four written code lines and added this one below
       if (proposal.votes.length >= proposal.minimumUpvotes - 1) {
         //  console.log('In if checkCount', req.body)
-        let tempStatus = { body: { status: 'Voting' } };
+        let tempStatus = { body: { status: 'Voting', decodeToken: req.body.decodeToken } };
         console.log('ID here ----->', req.params.id);
         await this.updateStatus(req.params.id, 2)
           .then(async (Result: any) => {
