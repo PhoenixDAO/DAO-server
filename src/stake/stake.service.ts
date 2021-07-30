@@ -144,6 +144,7 @@ export class StakeService {
       //   const newReward = amount 
       // }
       console.log('Proposal [][]', proposal)
+      console.log('Working')
       let newReward
       if(proposal.reward) {
          newReward = Number(amount) + proposal.reward??0
