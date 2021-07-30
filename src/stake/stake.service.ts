@@ -140,7 +140,17 @@ export class StakeService {
       );
 
       // UPDATING THE PROPOSAL DOCUMENT IN DATABASE
-      const newReward = amount + proposal.reward;
+      // if(proposal.reward){
+      //   const newReward = amount 
+      // }
+      console.log('Proposal [][]', proposal)
+      let newReward
+      if(proposal.reward) {
+         newReward = amount + proposal.reward
+      } else {
+         newReward = amount
+      }
+      // const newReward = amount + proposal.reward;
       const updatedProposal = await this.proposalModel
         .findByIdAndUpdate(
           req.params.id,
