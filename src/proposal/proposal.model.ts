@@ -33,6 +33,7 @@ export const ProposalSchema = new Schema(
       ],
     },
     githubLink: { type: String, default: '' },
+    discordLink:{type:String, default: ''},
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     country: { type: String, required: true },
