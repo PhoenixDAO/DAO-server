@@ -40,11 +40,11 @@ export class AuthService {
     try {
       const temp = {
         token: req.body.token,
-        userDetails: ['fullname', 'email', 'profileImage', 'numio_id'],
+        userDetails: [req.body.information.firstName, req.body.information.email, 'profileImage', req.body.information.numioId],
         app_secret: req.body.app_secret,
       };
       const resp = await numio.verifyToken(temp);
-      console.log('resp [[[]]] ', resp.data.data.userInformation);
+      console.log('resp [[[]]] ', resp);
       if (!resp || resp.data.status !== 200) {
         console.log('In if 1');
         throw { statusCode: 500, message: 'Internal server error' };

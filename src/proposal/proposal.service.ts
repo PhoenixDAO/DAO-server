@@ -353,7 +353,6 @@ export class ProposalService {
     console.log('Status', req.body);
     let blockChainResult;
     try {
-
       const { email } = req.body.decodeToken;
       const user = await this.userModel.find({ email });
       console.log(user);
@@ -414,7 +413,9 @@ export class ProposalService {
       //  Change this, commented the above four written code lines and added this one below
       if (proposal.votes.length >= proposal.minimumUpvotes - 1) {
         //  console.log('In if checkCount', req.body)
-        let tempStatus = { body: { status: 'Voting', decodeToken: req.body.decodeToken } };
+        let tempStatus = {
+          body: { status: 'Voting', decodeToken: req.body.decodeToken },
+        };
         console.log('ID here ----->', req.params.id);
         await this.updateStatus(req.params.id, 2)
           .then(async (Result: any) => {
@@ -781,6 +782,30 @@ export class ProposalService {
           },
           { runValidators: true, new: true },
         );
+      return updateProposal;
+    } catch (err) {
+      throw err;
+    }
+  };
+
+  updateProposalDiscord = async (id, discord, email) => {
+    const proposal = await this.proposalModel.findById(id);
+    try {
+      const user = await this.userModel.findOne({ email });
+      console.log(user);
+      if (!user.isAdmin) {
+        throw { statusCode: 401, message: 'Unauthroized' };
+      }
+      if (!proposal) {
+        throw { statusCode: 404, message: 'Proposal not found!' };
+      }
+      const updateProposal = await this.proposalModel.findByIdAndUpdate(
+        proposal._id,
+        {
+          discordLink: discord,
+        },
+        { runValidators: true, new: true },
+      );
       return updateProposal;
     } catch (err) {
       throw err;

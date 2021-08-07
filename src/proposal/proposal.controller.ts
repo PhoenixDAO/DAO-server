@@ -147,7 +147,7 @@ export class ProposalController {
       const { email } = req.body.decodeToken;
       const result = await this.ProposalService.getProposalByNumioAddress(
         req.body.numioAddress,
-        email
+        email,
       );
 
       res.status(200).send({
@@ -293,6 +293,26 @@ export class ProposalController {
       res.status(400).send({
         responseCode: err.statusCode,
         result: err.message,
+      });
+    }
+  }
+
+  @Put('/updateProposal/discord/:id')
+  async updateDiscordLink(@Req() req: Request, @Res() res: Response) {
+    const { id } = req.params;
+    const { discord } = req.body;
+    const { email } = req.body.decodeToken;
+    try {
+      const result = await this.ProposalService.updateProposalDiscord(
+        id,
+        discord,
+        email,
+      );
+      res.status(200).send({ responseCode: 200, result: result });
+    } catch (err) {
+      res.status(400).send({
+        responseCode: 400,
+        result: err,
       });
     }
   }
