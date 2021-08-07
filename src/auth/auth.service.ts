@@ -40,24 +40,25 @@ export class AuthService {
     try {
       const temp = {
         token: req.body.token,
+        sign: req.body.sign,
         userDetails: [req.body.information.firstName, req.body.information.email, 'profileImage', req.body.information.numioId],
         app_secret: req.body.app_secret,
       };
       const resp = await numio.verifyToken(temp);
-      console.log('resp [[[]]] ', resp);
+      console.log('resp [[[]]] ', resp.data);
       if (!resp || resp.data.status !== 200) {
         console.log('In if 1');
         throw { statusCode: 500, message: 'Internal server error' };
       }
-      // const {
-      //   email,
-      //   numioId,
-      //   first_name,
-      //   last_name,
-      // } = resp.data.data.userInformation;
+      const {
+        email,
+        numioId,
+        first_name,
+        last_name,
+      } = resp.data.data.userInformation;
 
       //  MY CHANGE
-      const { email, numioId, first_name, last_name } = req.body.information;
+      // const { email, numioId, first_name, last_name } = req.body.information;
       console.log('Email =======>>>>>>', email);
       const userExist = await this.userModel.findOne({ email: email });
       console.log('User exist', userExist);
