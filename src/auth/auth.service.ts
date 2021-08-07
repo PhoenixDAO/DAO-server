@@ -40,7 +40,7 @@ export class AuthService {
     try {
       const temp = {
         token: req.body.token,
-        userDetails: ['Gul Hameed', 'gulhameed99j+1@gmail.com', 'profileImage', 'Hameedd'],
+        userDetails: [req.body.information.firstName, req.body.information.email, 'profileImage', req.body.information.numioId],
         app_secret: req.body.app_secret,
       };
       const resp = await numio.verifyToken(temp);
