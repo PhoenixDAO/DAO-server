@@ -12,7 +12,10 @@ const moment = require('moment');
 const Web3 = require('web3');
 import { ProposalService } from '../proposal/proposal.service';
 // import { getEvents } from '../block/block.service';
-import { PHNX_PROPOSAL_ABI, PHNX_PROPOSAL_ADDRESS } from '../contracts/contracts';
+import {
+  PHNX_PROPOSAL_ABI,
+  PHNX_PROPOSAL_ADDRESS,
+} from '../contracts/contracts';
 
 @Injectable()
 export class CronService {
@@ -40,6 +43,11 @@ export class CronService {
     this.getEvents();
   }
 
+  @Cron('0 * * * *')
+  expire() {
+    console.log('expire Cron job');
+    this.expireUpVoteProposals({ body: { status: 'UpVote' } });
+  }
 
   getCurrentGasPrices = async () => {
     try {
@@ -280,6 +288,29 @@ export class CronService {
     }
   };
 
+  expireUpVoteProposals = async req => {
+    try {
+      const proposals = await this.proposalModel.find({
+        status: req.body.status,
+      });
+      const serverDate = moment(Date()).format();
+      if (proposals.length > 0) {
+        for (let i = 0; i < proposals.length; i++) {
+          if (moment(proposals[i].expirationDate).format() < serverDate) {
+            const proposal = await this.proposalModel.findByIdAndUpdate(
+              proposals[i]._id,
+              {
+                $set: { status: 'Fail' },
+              },
+              { runValidators: true, new: true },
+            );
+          }
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+  };
   votingTimeStart = async req => {
     try {
       // console.log('req.body is ', req.body);
@@ -374,10 +405,7 @@ export class CronService {
       'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
     );
     let contract_abi = PHNX_PROPOSAL_ABI;
-    let contract = new web3.eth.Contract(
-      contract_abi,
-      PHNX_PROPOSAL_ADDRESS,
-    );
+    let contract = new web3.eth.Contract(contract_abi, PHNX_PROPOSAL_ADDRESS);
     // console.log(2);
     const result = await this.blockModel.find();
     // console.log('Result [][]', result)
@@ -406,7 +434,7 @@ export class CronService {
               );
             }
             let newBlock = events[events.length - 1].blockNumber + 1;
-       
+
             const result2 = await this.blockModel.findByIdAndUpdate(
               result[0]._id,
               {
