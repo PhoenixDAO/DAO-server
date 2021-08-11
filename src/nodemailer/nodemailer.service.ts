@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import * as key from '../../phoenixdao-key.json';
 
 const nodemailer = require('nodemailer');
 require('dotenv').config();
