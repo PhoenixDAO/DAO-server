@@ -925,6 +925,7 @@ const { ecsign } = require('ethereumjs-util');
 import { encryptData, decryptData } from '../jwt';
 // const fs = require('fs')
 // const axios = require('axios');
+import {MAIN_NET_INFRUA_URL} from '../infuraURL'
 const Web3 = require('web3');
 const moment = require('moment');
 
@@ -1193,7 +1194,8 @@ export class ProposalService {
     console.log('Update status from blockchain');
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
-      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      MAIN_NET_INFRUA_URL
     );
 
     const contract = new web3.eth.Contract(
@@ -1203,15 +1205,16 @@ export class ProposalService {
     try {
       console.log(1);
       let pr_key = process.env.adminPrivateKey;
+      let adminPublicKey = process.env.adminPublicKey
       let count = await web3.eth.getTransactionCount(
-        '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
+        adminPublicKey,
         'pending',
       );
       let gasPrices = await this.getCurrentGasPrices();
       console.log(gasPrices);
       console.log('Working');
       let rawTransaction = {
-        from: '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
+        from: adminPublicKey,
         to: PHNX_PROPOSAL_ADDRESS,
         data: contract.methods.updateProposalStatus(id, 2).encodeABI(),
         gasPrice: gasPrices.high * 1000000000,

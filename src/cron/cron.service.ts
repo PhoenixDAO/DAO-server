@@ -16,6 +16,9 @@ import {
   PHNX_PROPOSAL_ABI,
   PHNX_PROPOSAL_ADDRESS,
 } from '../contracts/contracts';
+import {MAIN_NET_INFRUA_URL} from '../infuraURL';
+import process from 'process';
+
 
 @Injectable()
 export class CronService {
@@ -69,26 +72,28 @@ export class CronService {
   updateStatus = async (id, status) => {
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
-      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      MAIN_NET_INFRUA_URL
     );
 
     const contract = new web3.eth.Contract(
       PHNX_PROPOSAL_ABI,
-      '0x2c1A4C3c1bcb1eE2CCFF5eB53348CA0D028AEb6d',
+      PHNX_PROPOSAL_ADDRESS,
     );
     console.log('Here');
     // console.log('++++++++++++++++++++',PHNX_PROPOSAL_ABI)
     console.log('Update status from blockchain');
     try {
+      let adminPublicKey = process.env.adminPublicKey
       let count = await web3.eth.getTransactionCount(
-        '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
+        adminPublicKey,
         'pending',
       );
       let gasPrices = await this.getCurrentGasPrices();
       console.log(gasPrices);
       let rawTransaction = {
-        from: '0x51a73C48c8A9Ef78323ae8dc0bc1908A1C49b6c6',
-        to: '0x2c1A4C3c1bcb1eE2CCFF5eB53348CA0D028AEb6d',
+        from: adminPublicKey,
+        to: PHNX_PROPOSAL_ADDRESS,
         data: contract.methods.updateProposalStatus(id, status).encodeABI(),
         gasPrice: gasPrices.high * 1000000000,
         nonce: count,
@@ -398,24 +403,27 @@ export class CronService {
   // }
 
   getEvents = async () => {
-    // console.log('Get events working')
     // console.log(1);
+    console.log('Working')
     let web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/c89f216154d84b83bb9344a7d0a91108',
-      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      // 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
+      MAIN_NET_INFRUA_URL
     );
     let contract_abi = PHNX_PROPOSAL_ABI;
     let contract = new web3.eth.Contract(contract_abi, PHNX_PROPOSAL_ADDRESS);
-    // console.log(2);
+    // console.log('Contract', contract);
     const result = await this.blockModel.find();
-    // console.log('Result [][]', result)
+    console.log('Result [][]', result)
     contract.getPastEvents(
       'ProposalSubmitted',
       {
-        fromBlock: result[0].blockNumber,
+        fromBlock: result[0].proposalBlock,
         toBlock: 'latest',
       },
       async (err, events) => {
+        console.log('Events', events)
         if (!err) {
           // console.log('events', events.length);
           if (events.length > 0) {

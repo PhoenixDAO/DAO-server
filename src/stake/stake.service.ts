@@ -8,6 +8,7 @@ import { TransactionService } from '../transaction/transaction.service';
 import { User } from 'src/user/user.model';
 import { Proposal } from 'src/proposal/proposal.model';
 import { PHNX_PROPOSAL_ADDRESS, PHNX_STAKING_ADDRESS } from 'src/contracts/contracts';
+import {MAIN_NET_INFRUA_URL} from '../infuraURL'
 const Web3 = require('web3');
 
 @Injectable()
@@ -222,7 +223,8 @@ export class StakeService {
     console.log('Service working')
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
-      'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
+      MAIN_NET_INFRUA_URL
     );
     console.log(2)
     const txData = await web3.eth.getTransaction(txHash)
