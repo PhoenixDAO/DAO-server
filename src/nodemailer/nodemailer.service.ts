@@ -1,19 +1,32 @@
 import { Injectable } from '@nestjs/common';
+import * as key from '../../phoenixdao-key.json';
+
 const nodemailer = require('nodemailer');
 require('dotenv').config();
+
 //nodemailer configuration
 let transporter = nodemailer.createTransport({
-  service: 'Gmail',
-  port: 587,
-  secure: false,
+  // service: 'Gmail',
+  // port: 587,
+  // secure: false,
+  // auth: {
+  //   user: 'samadhello9812@gmail.com',
+  //   pass: 'igsbetfxlesuxkrs',
+  // },
+  // tls: {
+  //   rejectUnauthorized: false,
+  // },
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
-    user: 'samadhello9812@gmail.com',
-    pass: 'igsbetfxlesuxkrs',
-  },
-  tls: {
-    rejectUnauthorized: false,
+    type: 'OAuth2',
+    user: process.env.USER_EMAIL,
+    serviceClient: process.env.SERVICE_CLIENT,
+    privateKey: process.env.SERVICE_PRIVATE_KEY,
   },
 });
+
 @Injectable()
 export class NodemailerService {
   constructor() {}
@@ -21,10 +34,9 @@ export class NodemailerService {
     // console.log('Working here')
     console.log('Password ====>', process.env.EmailPassword);
     console.log('Request', req.body);
-    console.log('Email -->', req.body.email)
+    console.log('Email -->', req.body.email);
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     try {
-
       var mailOptions = {
         from: process.env.EmailUserName,
         to: req.body.email,

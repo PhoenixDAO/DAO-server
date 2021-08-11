@@ -64,3 +64,6 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+#phoenix-key
+/phoenixdao-key.json
