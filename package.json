@@ -36,6 +36,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "mongoose": "^5.9.27",
+    "node": "^12.22.3",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.4.16",
     "numio-sdk": "^1.0.8",
@@ -43,6 +44,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "web3": "^1.2.11"
+    
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
@@ -79,5 +81,8 @@
     },
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
-  }
+  },
+"engines": {
+    "node": "15.x"
+}
 }

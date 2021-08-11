@@ -23,6 +23,12 @@ let transporter = nodemailer.createTransport({
     user: process.env.USER_EMAIL,
     serviceClient: process.env.SERVICE_CLIENT,
     privateKey: process.env.SERVICE_PRIVATE_KEY,
+
+    user: process.env.EmailUserName,
+    pass: process.env.EmailPassword,
+  },
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
