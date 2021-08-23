@@ -44,7 +44,6 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
     "web3": "^1.2.11"
-    
   },
   "devDependencies": {
     "@nestjs/cli": "^7.0.0",
@@ -82,7 +81,7 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
   },
-"engines": {
+  "engines": {
     "node": "15.x"
-}
+  }
 }

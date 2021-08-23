@@ -925,7 +925,7 @@ const { ecsign } = require('ethereumjs-util');
 import { encryptData, decryptData } from '../jwt';
 // const fs = require('fs')
 // const axios = require('axios');
-import {MAIN_NET_INFRUA_URL} from '../infuraURL'
+import {MAIN_NET_INFRUA_URL,TEST_NET_INFURA_URL} from '../infuraURL'
 const Web3 = require('web3');
 const moment = require('moment');
 
@@ -1195,7 +1195,7 @@ export class ProposalService {
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
       // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
-      MAIN_NET_INFRUA_URL
+      TEST_NET_INFURA_URL
     );
 
     const contract = new web3.eth.Contract(

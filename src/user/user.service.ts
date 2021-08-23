@@ -67,23 +67,35 @@ export class UserService {
   }
   findUserByNumioId = async req => {
     console.log('REQ PARAMS', req.params.id);
-    console.log('REQ BODY', req.body)
+    console.log('REQ BODY', req.body);
     try {
       const userExist = await this.userModel.find({
         numioId: req.params.id,
       });
-      console.log('user exist', userExist)
-      if(userExist.length == 0){return true}
+      console.log('user exist', userExist);
+      if (userExist.length == 0) {
+        return { status: true, userAddress: 'not exists' };
+      }
       // if (!userExist) {
       //   return { statusCode: 400, message: 'No user found' };
       // }
-      console.log('User', userExist)
-      if(userExist.length >= 1 && userExist[0].numioAddress == req.body.address && userExist[0].numioId == req.params.id){
-        console.log('True')
-        return true;
+      console.log('User', userExist);
+      if (
+        userExist.length >= 1 &&
+        userExist[0].numioAddress == req.body.address &&
+        userExist[0].numioId == req.params.id
+      ) {
+        console.log('True');
+        return {
+          userAddress: userExist[0].numioAddress,
+          status: true,
+        };
       }
-      console.log('False')
-      return false
+      console.log('False');
+      return {
+        userAddress: userExist[0].numioAddress,
+        status: false,
+      };
       // return userExist;
     } catch (err) {
       throw err;
