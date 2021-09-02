@@ -1026,6 +1026,7 @@ export class ProposalService {
   };
   updateProposalStatus = async (id, req) => {
     console.log('In update proposal status', id, req.body);
+    let proposalStatus = req.body.status;
 
     // console.log('REQ ----->',id,req)
     // console.log('REQ ---->',req.body)
@@ -1047,7 +1048,9 @@ export class ProposalService {
       const user = await this.userModel.findOne({ email });
       console.log(user);
       if (!user.isAdmin) {
-        throw { statusCode: 401, message: 'Unauthroized' };
+        if (proposalStatus !== 'Pending') {
+          throw { statusCode: 401, message: 'Unauthroized' };
+        }
       }
       let Attributes = [];
       const proposal = await this.proposalModel.findById(id);
