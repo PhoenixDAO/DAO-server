@@ -24,7 +24,7 @@ export class AuthController {
   @Post('/numio')
   async loginWithNumio(@Req() req: Request, @Res() res: Response) {
     try {
-      console.log('process.env.DATABASE_URL', process.env.OLD_DATABASE_URL);
+      // console.log('process.env.DATABASE_URL', process.env.OLD_DATABASE_URL);
       const user = await this.authService.loginWithNumio(req);
       console.log('User created here -------->>>>>', user);
       res.status(200).send({
