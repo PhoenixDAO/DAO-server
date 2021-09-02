@@ -896,8 +896,6 @@
 //   // }
 // }
 
-
-
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-var-requires */
@@ -925,7 +923,7 @@ const { ecsign } = require('ethereumjs-util');
 import { encryptData, decryptData } from '../jwt';
 // const fs = require('fs')
 // const axios = require('axios');
-import {MAIN_NET_INFRUA_URL,TEST_NET_INFURA_URL} from '../infuraURL'
+import { MAIN_NET_INFRUA_URL, TEST_NET_INFURA_URL } from '../infuraURL';
 const Web3 = require('web3');
 const moment = require('moment');
 
@@ -1195,7 +1193,7 @@ export class ProposalService {
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
       // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
-      TEST_NET_INFURA_URL
+      TEST_NET_INFURA_URL,
     );
 
     const contract = new web3.eth.Contract(
@@ -1205,11 +1203,8 @@ export class ProposalService {
     try {
       console.log(1);
       let pr_key = process.env.adminPrivateKey;
-      let adminPublicKey = process.env.adminPublicKey
-      let count = await web3.eth.getTransactionCount(
-        adminPublicKey,
-        'pending',
-      );
+      let adminPublicKey = process.env.adminPublicKey;
+      let count = await web3.eth.getTransactionCount(adminPublicKey, 'pending');
       let gasPrices = await this.getCurrentGasPrices();
       console.log(gasPrices);
       console.log('Working');
@@ -1651,7 +1646,7 @@ export class ProposalService {
         proposal._id,
         {
           firstName: req.body.firstName,
-          lastName: req.body.lastName,
+          // lastName: req.body.lastName,
           name: req.body.name,
           country: req.body.country,
           email: req.body.email,
@@ -1823,4 +1818,3 @@ export class ProposalService {
   //   // console.log('Cron job');
   // }
 }
-
