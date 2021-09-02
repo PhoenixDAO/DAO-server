@@ -23,7 +23,7 @@ import { CronModule } from './cron/cron.module';
   imports: [
     ConfigModule.forRoot(),
     ScheduleModule.forRoot(),
-    MongooseModule.forRoot(process.env.DATABASE_URL, {
+    MongooseModule.forRoot(process.env.Testnet_Database, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     }),
@@ -42,9 +42,11 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .exclude({ path: 'auth/login', method: RequestMethod.ALL },
-      { path: 'auth/numio', method: RequestMethod.ALL },
-      { path: 'auth/metamask', method: RequestMethod.ALL })
-      .forRoutes({ path: "*", method: RequestMethod.ALL });
+      .exclude(
+        { path: 'auth/login', method: RequestMethod.ALL },
+        { path: 'auth/numio', method: RequestMethod.ALL },
+        { path: 'auth/metamask', method: RequestMethod.ALL },
+      )
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
 }

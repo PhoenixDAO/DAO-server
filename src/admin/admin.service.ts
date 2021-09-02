@@ -51,7 +51,7 @@ export class AdminService {
         throw { statusCode: 400, message: 'Data validation error!' };
       }
       const updateAttributes = await this.DAOAttributesModel.findByIdAndUpdate(
-        process.env.Attributes_DOC_ID,
+        process.env.Attributes_DOC_ID_Test,
         {
           $set: {
             minimumUpvotes: req.body.minimumUpvotes,
