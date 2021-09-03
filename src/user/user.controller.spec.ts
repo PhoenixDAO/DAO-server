@@ -10,7 +10,7 @@ describe('ProposalController', () => {
     _id: '12345678',
     numioAddress: 'SHIRT',
     firstName: 'imageLink123',
-    lastName: 'Caption123',
+    // lastName: 'Caption123',
   };
 
   class productModel {
