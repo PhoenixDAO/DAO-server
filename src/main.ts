@@ -2,9 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { from } from 'rxjs';
 import { AppModule } from './app.module';
 
-const express = require('express');
+// const express = require('express');
 
-const apps = express();
+// const apps = express();
 
 async function bootstrap() {
   // const app = await NestFactory.create(AppModule);
@@ -13,8 +13,8 @@ async function bootstrap() {
   //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
   //   credentials: true,
   // });
-  console.log('Working in main.ts')
-  const app = await NestFactory.create(AppModule, { cors: true });
+  console.log('Working in main.ts');
+  const app = await NestFactory.create(AppModule);
   let bodyParser = require('body-parser');
   // apps.use(express.static('public'));
   app.use(bodyParser({ limit: '524288000' }));
