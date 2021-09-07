@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-import { Controller, Req, Res, Get,Post } from '@nestjs/common';
+import { Controller, Req, Res, Get, Post } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { Request, Response } from 'express';
 
@@ -10,10 +10,15 @@ export class TransactionController {
   // Here we create a new transaction
   @Post('/')
   async addTransaction(@Req() req: Request, @Res() res: Response) {
-    console.log('REQ in TX controller', req.body)
+    console.log('REQ in TX controller', req.body);
     try {
       const { email, numioAddress } = req.body.decodeToken;
-      const result = await this.transactionService.createTransaction(req.body.TxHash, req.body.type, numioAddress, req.body.id, email);
+      const result = await this.transactionService.createTransaction(
+        req.body.TxHash,
+        req.body.type,
+        numioAddress,
+        req.body.id,
+      );
       res.status(200).send({
         responseCode: 200,
         result: result,
@@ -25,7 +30,6 @@ export class TransactionController {
       });
     }
   }
-
 
   // Here we get all the transactions
   @Get('/')

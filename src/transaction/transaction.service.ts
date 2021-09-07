@@ -16,31 +16,69 @@ export class TransactionService {
     @InjectModel('User') private readonly userModel: Model<User>,
     @InjectModel('Proposal') private readonly proposalModel: Model<Proposal>,
   ) {}
-  async createTransaction(TxHash, type, numioAddress, Id, email) {
+  // The difference in this function is in userProposal check with email
+  // async createTransaction(TxHash, type, numioAddress, Id, email) {
+  //   try {
+  //     console.log('req.body', Id, ', type : ', type);
+  //     const user = await this.userModel.findOne({ numioAddress }).exec();
+  //     if (!user) {
+  //       throw { statusCode: 404, message: 'User not found' };
+  //     }
+  //     const userProposal = await this.proposalModel.findOne({
+  //       email: email,
+  //       _id: Id,
+  //     });
+  //     if (!userProposal) {
+  //       throw {
+  //         statusCode: 401,
+  //         message: 'User does not have the proposal with this id',
+  //       };
+  //     }
+
+  //     let newTransaction;
+  //     if (type == 'Proposal') {
+  //       const proposal = await this.proposalModel.findById(Id);
+  //       if (!proposal) {
+  //         throw { statusCode: 404, message: 'Proposal not found' };
+  //       }
+
+  //       newTransaction = await this.transactionModel({
+  //         TxHash,
+  //         Type: type,
+  //         numioAddress,
+  //         proposalId: Id,
+  //       });
+  //     } else {
+  //       newTransaction = await this.transactionModel({
+  //         TxHash,
+  //         Type: type,
+  //         numioAddress,
+  //         stakeId: Id,
+  //       });
+  //     }
+
+  //     const createdTransaction = await this.transactionModel.create(
+  //       newTransaction,
+  //     );
+  //     return createdTransaction;
+  //   } catch (error) {
+  //     console.log('error', error);
+  //     throw error;
+  //   }
+  // }
+  async createTransaction(TxHash, type, numioAddress, Id) {
     try {
       console.log('req.body', Id, ', type : ', type);
       const user = await this.userModel.findOne({ numioAddress }).exec();
       if (!user) {
         throw { statusCode: 404, message: 'User not found' };
       }
-      const userProposal = await this.proposalModel.findOne({
-        email: email,
-        _id: Id,
-      });
-      if (!userProposal) {
-        throw {
-          statusCode: 401,
-          message: 'User does not have the proposal with this id',
-        };
-      }
-
       let newTransaction;
       if (type == 'Proposal') {
         const proposal = await this.proposalModel.findById(Id);
         if (!proposal) {
           throw { statusCode: 404, message: 'Proposal not found' };
         }
-
         newTransaction = await this.transactionModel({
           TxHash,
           Type: type,
@@ -55,7 +93,6 @@ export class TransactionService {
           stakeId: Id,
         });
       }
-
       const createdTransaction = await this.transactionModel.create(
         newTransaction,
       );
