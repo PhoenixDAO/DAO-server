@@ -59,7 +59,7 @@ export class UserService {
       if (user) {
         return user;
       } else {
-        throw { statusCode: 404, message: 'User not found' };
+        throw { statusCode: 404, message: 'User not found user.service' };
       }
     } catch (error) {
       throw error;

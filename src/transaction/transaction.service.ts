@@ -66,12 +66,29 @@ export class TransactionService {
   //     throw error;
   //   }
   // }
+  async findNumioAddressWithEmail(email) {
+    try {
+      let res = await this.userModel.find({ email }).exec();
+      // console.log(
+      //   '====>> Coming in findNumioAddressWithEmail',
+      //   res[0].numioAddress,
+      // );
+      return res[0].numioAddress;
+    } catch (e) {
+      console.log('===> error in findNumioAddressWithEmail', e);
+      throw e;
+    }
+  }
   async createTransaction(TxHash, type, numioAddress, Id) {
     try {
       console.log('req.body', Id, ', type : ', type);
       const user = await this.userModel.findOne({ numioAddress }).exec();
+      console.log(user, 'user at transaction11111111111');
       if (!user) {
-        throw { statusCode: 404, message: 'User not found' };
+        throw {
+          statusCode: 404,
+          message: 'User not found transaction1',
+        };
       }
       let newTransaction;
       if (type == 'Proposal') {
@@ -174,7 +191,7 @@ export class TransactionService {
         .findOne({ numioAddress: req.params.id })
         .exec();
       if (!user) {
-        throw { statusCode: 404, message: 'User not found!' };
+        throw { statusCode: 404, message: 'User not found transaction2' };
       }
       const transactions = await this.transactionModel
         .find({ numioAddress: req.params.id })
@@ -195,7 +212,7 @@ export class TransactionService {
         .findOne({ numioAddress: req.params.id })
         .exec();
       if (!user) {
-        throw { statusCode: 404, message: 'User not found!' };
+        throw { statusCode: 404, message: 'User not found transaction3' };
       }
       const transactions = await this.transactionModel
         .find({ numioAddress: req.params.id, Type: 'Proposal' })
@@ -216,7 +233,7 @@ export class TransactionService {
         .findOne({ numioAddress: req.params.id })
         .exec();
       if (!user) {
-        throw { statusCode: 404, message: 'User not found!' };
+        throw { statusCode: 404, message: 'User not found transaction4' };
       }
       const transactions = await this.transactionModel
         .find({

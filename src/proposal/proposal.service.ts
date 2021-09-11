@@ -85,7 +85,7 @@ export class ProposalService {
     try {
       const user = await this.userService.getUserById(req.numioAddress);
       if (!user) {
-        throw { statusCode: 404, message: 'User not found' };
+        throw { statusCode: 404, message: 'User not found 1' };
       }
       const statusTest = 'Incomplete';
       console.log(1);
@@ -564,7 +564,7 @@ export class ProposalService {
         numioAddress: req.body.numioAddress,
       });
       if (!user) {
-        throw { statusCode: 400, message: 'User not found' };
+        throw { statusCode: 400, message: 'User not found 2' };
       }
       if (user.isAdmin == false) {
         throw { statusCode: 400, message: 'User must be the admin' };
@@ -642,7 +642,7 @@ export class ProposalService {
         numioAddress: req.body.numioAddress,
       });
       if (!user) {
-        throw { statusCode: 400, message: 'User not found' };
+        throw { statusCode: 400, message: 'User not found 3' };
       }
       if (result.numioAddress != user.numioAddress) {
         throw { statusCode: 400, message: 'Invalid User, user must be same' };

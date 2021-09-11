@@ -12,13 +12,28 @@ export class TransactionController {
   async addTransaction(@Req() req: Request, @Res() res: Response) {
     console.log('REQ in TX controller', req.body);
     try {
-      const { email, numioAddress } = req.body.decodeToken;
+      const {
+        email,
+        //  numioAddress
+      } = req.body.decodeToken;
+      console.log(
+        'Numio address in transaction controller',
+        // numioAddress,
+        email,
+      );
+      // Zain ==> Method added
+      let numioAddress = await this.transactionService.findNumioAddressWithEmail(
+        email,
+      );
+      console.log('Zain ==> Method added NummioAddress', numioAddress);
+
       const result = await this.transactionService.createTransaction(
         req.body.TxHash,
         req.body.type,
         numioAddress,
         req.body.id,
       );
+      console.log('result addTransaction controllerrrrrrrrrr', result);
       res.status(200).send({
         responseCode: 200,
         result: result,
