@@ -145,11 +145,11 @@ export class ProposalService {
       const { email } = req.body.decodeToken;
       const user = await this.userModel.findOne({ email });
       console.log(user);
-      if (!user.isAdmin) {
-        if (proposalStatus !== 'Pending') {
-          throw { statusCode: 401, message: 'Unauthroized' };
-        }
-      }
+      // if (!user.isAdmin) {
+      //   if (proposalStatus !== 'Pending') {
+      //     throw { statusCode: 401, message: 'Unauthroized' };
+      //   }
+      // }
       let Attributes = [];
       const proposal = await this.proposalModel.findById(id);
       // console.log('proposal', proposal);
