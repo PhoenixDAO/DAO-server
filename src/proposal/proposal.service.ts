@@ -294,7 +294,7 @@ export class ProposalService {
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
       // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
-      TEST_NET_INFURA_URL,
+      MAIN_NET_INFRUA_URL,
     );
 
     const contract = new web3.eth.Contract(
