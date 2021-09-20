@@ -72,7 +72,7 @@ export class CronService {
     const web3 = new Web3(
       // 'https://rinkeby.infura.io/v3/98ae0677533f424ca639d5abb8ead4e7',
       // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
-      MAIN_NET_INFRUA_URL,
+      TEST_NET_INFURA_URL,
     );
 
     const contract = new web3.eth.Contract(
@@ -405,7 +405,7 @@ export class CronService {
       // 'https://rinkeby.infura.io/v3/c89f216154d84b83bb9344a7d0a91108',
       // 'https://rinkeby.infura.io/v3/637a6ab08bce4397a29cbc97b4c83abf',
       // 'https://mainnet.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'
-      MAIN_NET_INFRUA_URL,
+      TEST_NET_INFURA_URL,
     );
     let contract_abi = PHNX_PROPOSAL_ABI;
     let contract = new web3.eth.Contract(contract_abi, PHNX_PROPOSAL_ADDRESS);
