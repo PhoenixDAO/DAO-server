@@ -73,6 +73,7 @@ export class UserService {
         numioAddress: req.body.address,
       });
       // Faheel's condition to check if NumioAddress doesn't exist with NumioId
+      console.log('userExistOnAddress', userExistOnAddress);
       if (userExistOnAddress.length > 0) {
         const userExistOnAddressAndNumio = await this.userModel.find({
           numioAddress: req.body.address,
@@ -85,8 +86,12 @@ export class UserService {
             message: 'Metamask address already exist with a Numio ID',
           };
         }
+        const userExist = await this.userModel.find({
+          numioId: req.params.id,
+        });
         return {
-          userAddress: req.body.address,
+          userAddress: `Your metamask address does not match your numio id. Please switch
+          your account to address ${userExist[0].numioAddress}`,
           status: false,
         };
       }
@@ -114,7 +119,8 @@ export class UserService {
       }
       console.log('False');
       return {
-        userAddress: userExist[0].numioAddress,
+        userAddress: `Your 1 metamask address does not match your numio id. Please switch
+        your account to address ${userExist[0].numioAddress}`,
         status: false,
       };
       // return userExist;

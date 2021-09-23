@@ -44,6 +44,7 @@ export const ProposalSchema = new Schema(
     duration: { type: Number, required: true },
     userProfession: { type: String, required: true },
     counter: { type: Number, default: 0 },
+    proposalId: { type: String, required: false },
   },
   { timestamps: true },
 );
