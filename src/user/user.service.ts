@@ -69,6 +69,26 @@ export class UserService {
     console.log('REQ PARAMS', req.params.id);
     console.log('REQ BODY', req.body);
     try {
+      const userExistOnAddress = await this.userModel.find({
+        numioAddress: req.body.address,
+      });
+      if (userExistOnAddress.length > 0) {
+        const userExistOnAddressAndNumio = await this.userModel.find({
+          numioAddress: req.body.address,
+          numioId: req.params.id,
+        });
+        if (userExistOnAddressAndNumio.length > 0) {
+          return {
+            userAddress: userExistOnAddressAndNumio[0].address,
+            status: true,
+          };
+        }
+        return {
+          userAddress: req.body.address,
+          status: false,
+        };
+      }
+
       const userExist = await this.userModel.find({
         numioId: req.params.id,
       });

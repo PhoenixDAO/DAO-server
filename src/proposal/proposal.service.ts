@@ -1261,7 +1261,6 @@ export class ProposalService {
       console.log(user);
       const proposal = await this.proposalModel.findById(req.params.id);
       console.log('Proposal', proposal);
-
       if (!proposal) {
         //   console.log('In if 1')
         throw { statusCode: 404, message: 'Proposal Not Found' };

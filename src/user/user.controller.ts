@@ -94,7 +94,6 @@ export class UserController {
   async getStakedProposals(@Req() req: Request, @Res() res: Response) {
     try {
       const user = await this.userService.getStakedProposals(req);
-
       res.status(200).send({
         responseCode: 200,
         result: user,

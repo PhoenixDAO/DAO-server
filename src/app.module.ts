@@ -19,7 +19,7 @@ import { AdminModule } from './admin/admin.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronModule } from './cron/cron.module';
 import { NodemailerService } from './nodemailer/nodemailer.service';
-import { ProposalService } from './proposal/proposal.service'
+import { ProposalService } from './proposal/proposal.service';
 // import { BlockModule } from './block/block.module';
 
 @Module({
@@ -55,10 +55,10 @@ export class AppModule implements NestModule {
         { path: 'auth/metamask', method: RequestMethod.ALL },
         { path: 'proposal/sendMail', method: RequestMethod.ALL },
         { path: 'test', method: RequestMethod.ALL },
-        { path: 'user/findUserByNumioId/:id', method: RequestMethod.ALL },       
+        { path: 'user/findUserByNumioId/:id', method: RequestMethod.ALL },
         { path: 'proposal/generateVRS', method: RequestMethod.ALL },
-        { path: 'stake/getReceipt', method: RequestMethod.ALL },     
-        { path: 'proposal/createBlock', method: RequestMethod.ALL },           
+        { path: 'stake/getReceipt', method: RequestMethod.ALL },
+        { path: 'proposal/createBlock', method: RequestMethod.ALL },
       )
       .forRoutes({ path: '*', method: RequestMethod.ALL });
   }
