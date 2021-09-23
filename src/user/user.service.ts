@@ -59,7 +59,7 @@ export class UserService {
       if (user) {
         return user;
       } else {
-        throw { statusCode: 404, message: 'User not found' };
+        throw { statusCode: 404, message: 'User not found user.service' };
       }
     } catch (error) {
       throw error;
@@ -72,6 +72,7 @@ export class UserService {
       const userExistOnAddress = await this.userModel.find({
         numioAddress: req.body.address,
       });
+      // Faheel's condition to check if NumioAddress doesn't exist with NumioId
       if (userExistOnAddress.length > 0) {
         const userExistOnAddressAndNumio = await this.userModel.find({
           numioAddress: req.body.address,
@@ -81,6 +82,7 @@ export class UserService {
           return {
             userAddress: userExistOnAddressAndNumio[0].address,
             status: true,
+            message: 'Metamask address already exist with a Numio ID',
           };
         }
         return {
@@ -88,7 +90,6 @@ export class UserService {
           status: false,
         };
       }
-
       const userExist = await this.userModel.find({
         numioId: req.params.id,
       });

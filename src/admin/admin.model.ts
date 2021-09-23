@@ -19,7 +19,7 @@ export const DAOAttributesSchema = new mongoose.Schema(
 );
 
 export interface DAOAttributes {
-  mimimumUpvotes: number;
+  minimumUpvotes: number;
   monthlyBudget: number;
   maxUpvoteDays: number;
 }

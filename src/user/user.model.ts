@@ -11,9 +11,9 @@ export const UserSchema = new mongoose.Schema(
     firstName: {
       type: String,
     },
-    lastName: {
-      type: String,
-    },
+    // lastName: {
+    //   type: String,
+    // },
     email: { type: String, required: true, unique: true },
     proposalVote: [
       {
@@ -39,7 +39,7 @@ export const UserSchema = new mongoose.Schema(
 export interface User {
   numioAddress: string;
   firstName: string;
-  lastName: string;
+  // lastName: string;
   email: string;
   proposalStake: mongoose.Schema.Types.ObjectId;
   proposalVote: mongoose.Schema.Types.ObjectId;

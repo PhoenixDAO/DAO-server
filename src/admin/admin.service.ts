@@ -19,7 +19,7 @@ export class AdminService {
 
   async getAttributes(): Promise<DAOAttributes[]> {
     try {
-      console.log('In attributes')
+      console.log('In attributes');
       const Attributes = await this.DAOAttributesModel.find().exec();
       if (Attributes.length !== 0) {
         return Attributes[0];
@@ -27,7 +27,7 @@ export class AdminService {
         throw { statusCode: 404, message: 'No attributes found!' };
       }
     } catch (err) {
-      console.log('Here')
+      console.log('Here');
       throw err;
     }
   }
@@ -65,12 +65,12 @@ export class AdminService {
     }
   }
 
-  async createDAOAttributes(req){
-    try{
-      const result = await this.DAOAttributesModel.create(req.body)
-      console.log(req.body)
-    }catch(err){
-        throw err
+  async createDAOAttributes(req) {
+    try {
+      const result = await this.DAOAttributesModel.create(req.body);
+      console.log(req.body);
+    } catch (err) {
+      throw err;
     }
   }
 

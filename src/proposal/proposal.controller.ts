@@ -277,7 +277,7 @@ export class ProposalController {
 
       let value2 = { body: decrypt };
       let value3 = { encrypt: { value: req.params.id } };
-      console.log('Last console');
+      // console.log('Last console');
       const decryptedId = await decryptData(value3);
 
       const result = await this.ProposalService.updateProposal(

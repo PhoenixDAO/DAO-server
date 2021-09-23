@@ -59,7 +59,7 @@ export class AuthService {
         email,
         numioId,
         first_name,
-        last_name,
+        // last_name,
       } = resp.data.data.userInformation;
 
       //  MY CHANGE
@@ -84,7 +84,7 @@ export class AuthService {
         const userData = {
           numioAddress: req.body.information.numioAddress,
           firstName: req.body.information.firstName,
-          lastName: req.body.information.lastName,
+          // lastName: req.body.information.lastName,
           email: req.body.information.email,
           isAdmin: false,
           numioId: req.body.information.numioId,
@@ -106,7 +106,7 @@ export class AuthService {
           _id: createdUser._id,
           email: createdUser.email,
           first_name: createdUser.firstName,
-          last_name: createdUser.lastName,
+          // last_name: createdUser.lastName,
           isAdmin: createdUser.isAdmin,
           numioAddress: createdUser.numioAddress,
           proposalStake: createdUser.proposalStake,
@@ -140,7 +140,7 @@ export class AuthService {
         _id: userExist._id,
         email: userExist.email,
         first_name: userExist.firstName,
-        last_name: userExist.lastName,
+        // last_name: userExist.lastName,
         isAdmin: userExist.isAdmin,
         numioAddress: userExist.numioAddress,
         proposalStake: userExist.proposalStake,
@@ -171,11 +171,15 @@ export class AuthService {
       }
       if (!userExist) {
         if (req.body.register) {
-          const { first_name, last_name, email } = req.body;
+          const {
+            first_name,
+            //  last_name,
+            email,
+          } = req.body;
           const userData = {
             numioAddress: req.body.Address,
             firstName: first_name,
-            lastName: last_name,
+            // lastName: last_name,
             email: email,
             isAdmin: false,
           };
@@ -191,7 +195,7 @@ export class AuthService {
             _id: createdUser._id,
             email: createdUser.email,
             first_name: createdUser.firstName,
-            last_name: createdUser.lastName,
+            // last_name: createdUser.lastName,
             isAdmin: createdUser.isAdmin,
             numioAddress: createdUser.numioAddress,
             proposalStake: createdUser.proposalStake,
@@ -229,7 +233,7 @@ export class AuthService {
         _id: userExist._id,
         email: userExist.email,
         first_name: userExist.firstName,
-        last_name: userExist.lastName,
+        // last_name: userExist.lastName,
         isAdmin: userExist.isAdmin,
         numioAddress: userExist.numioAddress,
         proposalStake: userExist.proposalStake,
