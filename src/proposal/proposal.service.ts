@@ -83,6 +83,22 @@ export class ProposalService {
     let serverDate = moment(Date.now()).format();
     console.log('Server Date =======>>', serverDate);
     try {
+      const { proposalId } = req;
+      if (
+        proposalId === '' ||
+        proposalId === null ||
+        proposalId === undefined
+      ) {
+        throw { statusCode: 404, message: 'proposal id not found' };
+      } else {
+        const proposal = await this.proposalModel.findOne({
+          proposalId: proposalId,
+        });
+        console.log('proposal', proposal);
+        if (proposal !== null) {
+          throw { statusCode: 403, message: 'Request cant be processed' };
+        }
+      }
       const user = await this.userService.getUserById(req.numioAddress);
       if (!user) {
         throw { statusCode: 404, message: 'User not found 1' };
@@ -357,7 +373,6 @@ export class ProposalService {
       console.log(user);
       const proposal = await this.proposalModel.findById(req.params.id);
       console.log('Proposal', proposal);
-
       if (!proposal) {
         //   console.log('In if 1')
         throw { statusCode: 404, message: 'Proposal Not Found' };

@@ -358,6 +358,7 @@ export class CronService {
                 ' with voting date ',
                 proposal.votingDate,
               );
+              
             })
             .catch(err => {
               console.log('error updating proposal ', err);
