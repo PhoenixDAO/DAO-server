@@ -6,6 +6,8 @@ import { DAOAttributes } from './admin.model';
 import { User } from '../user/user.model';
 import { Proposal } from '../proposal/proposal.model';
 
+import jwt = require('jsonwebtoken');
+
 @Injectable()
 export class AdminService {
   constructor(
@@ -16,6 +18,36 @@ export class AdminService {
     @InjectModel('Proposal')
     private readonly proposalModel: Model<Proposal>,
   ) {}
+
+  async adminAuthorization(req: any)  {
+    // console.log('coming hereeeeeeeeeeeee++>>>>>> 2', req.headers.authorization)
+    if(!req){
+      throw 'No request found at adminAuthorization!'
+    }
+    const user = await this.userModel.findById(req.params.id).exec(); 
+    if (!user) {
+      throw { statusCode: 404, message: 'No user found!' };
+    }
+    if (!user.isAdmin) {
+      throw { statusCode: 403, message: 'Forbidden! admin resource!' };
+    }
+
+
+    // authorization 1
+    const header = req.headers.authorization;
+    if (header == undefined) throw 'forbidden';
+    if (typeof header !== 'undefined') {
+      const bearer = header.split(' ');
+      const token = bearer[1];
+      const decode = await jwt.verify(token, process.env.SECRET_KEY);
+      // console.log('decodedd ==>>>>>>>>>>>>>>',decode)
+      // req.body.decodeToken = decode;
+      if(!decode){
+        // console.log('Request is not authorized!  ++++>>>>', decode, '==>>>>>>', req.body.decodeToken)
+        throw 'Request is not authorized!'
+      }
+    }
+  }
 
   async getAttributes(): Promise<DAOAttributes[]> {
     try {
@@ -32,15 +64,10 @@ export class AdminService {
     }
   }
   async updateAttributes(req) {
+    // console.log('coming hereeeeeeeeeeeee++>>>>>> 1', req.body)
     try {
-      const user = await this.userModel.findById(req.params.id).exec();
-      if (!user) {
-        throw { statusCode: 404, message: 'No user found!' };
-      }
-      if (!user.isAdmin) {
-        throw { statusCode: 403, message: 'Forbidden! admin resource!' };
-      }
-
+      await this.adminAuthorization(req)
+      console.log('coming hereeeeeeeeeeeee++>>>>>> ????')
       if (
         !req.body.minimumUpvotes ||
         !req.body.monthlyBudget ||
