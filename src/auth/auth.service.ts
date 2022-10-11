@@ -45,7 +45,7 @@ export class AuthService {
       const temp = {
         token: req.body.token,
         userDetails: ['fullname', 'email', 'profileImage', 'numio_id'],
-        app_secret: process.env.app_secret,
+        app_secret: process.env.APP_SECRET,
       };
       const resp = await numio.verifyToken(temp);
       console.log('response -->', resp.data.data);

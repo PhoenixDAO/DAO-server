@@ -34,7 +34,7 @@ export class BlockChainFunctions {
       // Send the transaction
       const signed = await web3.eth.accounts.signTransaction(
         transaction,
-        process.env.private_key,
+        process.env.PRIVATE_KEY,
       );
       const tx = await web3.eth
         .sendSignedTransaction(signed.rawTransaction)
